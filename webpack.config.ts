@@ -33,10 +33,24 @@ export default (env: EnvVariables) => {
 					test: /\.s[ac]ss$/i,
 					use: ['style-loader', 'css-loader', 'sass-loader'],
 				},
+				// {
+				// 	test: /\.tsx?$/,
+				// 	use: 'ts-loader',
+				// 	exclude: /node_modules/,
+				// },
 				{
 					test: /\.tsx?$/,
-					use: 'ts-loader',
 					exclude: /node_modules/,
+					use: {
+						loader: 'babel-loader',
+						options: {
+							presets: [
+								'@babel/preset-env',
+								'@babel/preset-typescript',
+								['@babel/preset-react', { runtime: 'automatic' }],
+							],
+						},
+					},
 				},
 			],
 		},
