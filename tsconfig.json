@@ -11,7 +11,11 @@
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 
-		"plugins": [{ "name": "typescript-plugin-css-modules" }]
+		"plugins": [{ "name": "typescript-plugin-css-modules" }],
+		"baseUrl": "./",
+		"paths": {
+			"@*": ["src*"]
+		}
 	},
 	"ts-node": {
 		"compilerOptions": {
