@@ -1,0 +1,22 @@
+.navMenu {
+	background-color: transparent;
+
+	&__nav {
+		margin-bottom: 38px;
+	}
+
+	&__list {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	&__link {
+		color: white;
+		text-decoration: none;
+
+		&.active {
+			color: var(--main-color);
+		}
+	}
+}
