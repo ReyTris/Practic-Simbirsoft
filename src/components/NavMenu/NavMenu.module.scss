@@ -1,5 +1,9 @@
+@import '@/styles/mixins.scss';
+
 .navMenu {
-	background-color: transparent;
+	background-color: #111518;
+	height: 100%;
+	width: 752px;
 
 	&__nav {
 		margin-bottom: 38px;
@@ -12,11 +16,17 @@
 	}
 
 	&__link {
+		@include font(32px, 37px, 500);
 		color: white;
 		text-decoration: none;
 
 		&.active {
 			color: var(--main-color);
 		}
+	}
+}
+
+@media (max-width: 768px) {
+	.navMenu {
 	}
 }
