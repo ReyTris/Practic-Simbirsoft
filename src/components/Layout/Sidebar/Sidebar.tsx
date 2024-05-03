@@ -1,10 +1,24 @@
-import NavMenu from '@/components/NavMenu/NavMenu';
 import { FC } from 'react';
+import * as styles from './Sidebar.module.scss';
 
-export const Sidebar: FC = () => {
+import cn from 'classnames';
+
+export interface SidebarProps {
+	handlerNavMenu: () => void;
+	burgerStatus: boolean;
+}
+
+export const Sidebar: FC<SidebarProps> = ({ handlerNavMenu, burgerStatus }) => {
 	return (
-		<div>
-			<NavMenu></NavMenu>
+		<div className={styles.sidebar}>
+			<div
+				className={cn(styles.burger, { [styles.open]: burgerStatus })}
+				onClick={handlerNavMenu}
+			>
+				<div className={styles.burger__line}></div>
+				<div className={styles.burger__line}></div>
+				<div className={styles.burger__line}></div>
+			</div>
 		</div>
 	);
 };

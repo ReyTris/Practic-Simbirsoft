@@ -45,6 +45,7 @@ export default (env: EnvVariables) => {
 						isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
 						'css-loader',
 						'sass-loader',
+						'postcss-loader',
 					],
 				},
 				// {

@@ -1,7 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import 'mixins.scss';
 
 :root {
 	--main-color: #0ec261;
+}
+
+* {
+	box-sizing: border-box;
 }
 
 ul {
