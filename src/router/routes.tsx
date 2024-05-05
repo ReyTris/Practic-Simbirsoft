@@ -1,10 +1,10 @@
 import Layout from '@/components/Layout';
 import { InsurancePage } from '@/pages/InsurancePage/InsurancePage';
 import MainPage from '@/pages/MainPage';
-import { createHashRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { PathNames } from './pathNames';
 
-const routes = createHashRouter([
+const routes = createBrowserRouter([
 	{
 		path: PathNames.MAIN_PAGE,
 		element: <Layout />,

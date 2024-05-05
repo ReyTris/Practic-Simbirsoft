@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import NavMenu from '../NavMenu/NavMenu';
-import * as styles from './Layout.module.scss';
 import Sidebar from './Sidebar';
 
 export const Layout = () => {
@@ -11,10 +10,10 @@ export const Layout = () => {
 		setShowMenu(!showMenu);
 	};
 	return (
-		<main className={styles.mainWrapper}>
+		<main className="min-h-[100vh] flex overflow-hidden m-auto">
 			<Sidebar burgerStatus={showMenu} handlerNavMenu={handlerNavMenu} />
 			{showMenu && <NavMenu handlerNavMenu={handlerNavMenu} />}
-			<div className="w-full">
+			<div className="flex-grow w-wrapper">
 				<Outlet />
 			</div>
 		</main>

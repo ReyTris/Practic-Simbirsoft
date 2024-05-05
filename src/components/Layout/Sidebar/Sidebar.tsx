@@ -10,7 +10,7 @@ export interface SidebarProps {
 
 export const Sidebar: FC<SidebarProps> = ({ handlerNavMenu, burgerStatus }) => {
 	return (
-		<div className={styles.sidebar}>
+		<div className="w-sidebar bg-[#151B1F] px-[20px] py-[32px]">
 			<div
 				className={cn(styles.burger, { [styles.open]: burgerStatus })}
 				onClick={handlerNavMenu}

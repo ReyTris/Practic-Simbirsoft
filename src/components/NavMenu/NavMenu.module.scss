@@ -4,11 +4,12 @@
 	position: absolute;
 	height: 100%;
 	width: 100%;
+	z-index: 900;
 	background-color: #151b1fcf;
 }
 
 .navMenu {
-	width: 752px;
+	width: calc(50% + 32px);
 	background-color: #111518;
 	padding: 300px 128px;
 	height: 100%;
@@ -42,7 +43,9 @@
 	}
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 	.navMenu {
+		max-width: 614px;
+		padding: 300px 97px;
 	}
 }

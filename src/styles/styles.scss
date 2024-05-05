@@ -3,10 +3,7 @@
 @tailwind utilities;
 
 @import 'mixins.scss';
-
-:root {
-	--main-color: #0ec261;
-}
+@import 'variables.scss';
 
 * {
 	box-sizing: border-box;
@@ -18,4 +15,8 @@ ul {
 
 li {
 	text-decoration: none;
+}
+
+h1 {
+	font-size: 70px;
 }
