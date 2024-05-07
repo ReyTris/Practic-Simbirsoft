@@ -10,6 +10,7 @@ module.exports = {
 			colors: {
 				main: '#0ec261',
 				grayLight: '#EEEEEE',
+				gray: '#999999',
 			},
 		},
 	},

@@ -43,9 +43,14 @@
 	}
 }
 
+@media (max-width: 1280px) {
+	.navMenu {
+		width: calc(100% / 5 * 3 + 32px);
+		padding: 300px 97px;
+	}
+}
 @media (max-width: 1024px) {
 	.navMenu {
-		max-width: 614px;
-		padding: 300px 97px;
+		width: 100%;
 	}
 }

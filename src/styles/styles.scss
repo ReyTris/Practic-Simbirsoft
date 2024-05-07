@@ -4,9 +4,12 @@
 
 @import 'mixins.scss';
 @import 'variables.scss';
+@import 'fonts.scss';
 
 * {
 	box-sizing: border-box;
+
+	font-family: 'Roboto', sans-serif;
 }
 
 ul {
@@ -19,4 +22,13 @@ li {
 
 h1 {
 	font-size: 70px;
+	font-weight: 700;
+	line-height: 82px;
+}
+
+@media screen and (max-width: 768px) {
+	h1 {
+		font-size: 32px;
+		line-height: 32px;
+	}
 }

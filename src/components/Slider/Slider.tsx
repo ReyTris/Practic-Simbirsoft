@@ -45,7 +45,7 @@ const dataSlider: SwiperSlideProps[] = [
 	},
 	{
 		title: 'Обслуживание',
-		preview: '',
+		preview: 'Автомобиль проходит еженедельное ТО',
 		bgButton: 'bg-gradient-to-r from-[#281349] to-[#720C7B]',
 		imagePath: ServicesImage,
 	},

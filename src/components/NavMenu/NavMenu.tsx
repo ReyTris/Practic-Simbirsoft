@@ -21,7 +21,11 @@ const NavMenu = ({ handlerNavMenu }: NavMenuProps) => {
 						{dataNavMenu.map(({ title, link }) => {
 							return (
 								<li key={title}>
-									<NavMenuLink title={title} link={link} />
+									<NavMenuLink
+										title={title}
+										link={link}
+										onClick={handlerNavMenu}
+									/>
 								</li>
 							);
 						})}
