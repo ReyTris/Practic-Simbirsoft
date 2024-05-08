@@ -1,7 +1,7 @@
+import { dataNavMenu, socialLinks } from '@/constants/nav-menu-data';
 import { Button } from '../ui/Button';
 import * as styles from './NavMenu.module.scss';
 import { NavMenuLink } from './NavMenuLink';
-import { dataNavMenu, socialLinks } from './dataNavMenu';
 
 interface NavMenuProps {
 	handlerNavMenu: () => void;

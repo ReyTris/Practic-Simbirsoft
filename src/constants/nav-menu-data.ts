@@ -1,9 +1,8 @@
 import InstagramIcon from '@/assets/icons/Instagram.svg';
 import FBIcon from '@/assets/icons/fb.svg';
 import TelegramIcon from '@/assets/icons/telega.svg';
+import { INavMenuLink, ISocialLink } from '@/components/types/navMenu';
 import { PathNames } from '@/router/pathNames';
-import { INavMenuLink, ISocialLink } from './types';
-
 export const dataNavMenu: INavMenuLink[] = [
 	{ title: 'Парковка', link: PathNames.PARKING_PAGE },
 	{ title: 'Страховка', link: PathNames.INSURANCE_PAGE },

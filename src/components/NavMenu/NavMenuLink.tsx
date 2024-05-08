@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
+import { INavMenuLink } from '../types/navMenu';
 import * as styles from './NavMenu.module.scss';
-import { INavMenuLink } from './types';
 
 export const NavMenuLink = ({ title, link, onClick }: INavMenuLink) => {
 	return (

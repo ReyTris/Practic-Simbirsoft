@@ -1,55 +1,13 @@
 import NextArrow from '@/assets/icons/next.svg';
 import PrevArrow from '@/assets/icons/prev.svg';
+import { dataSlider } from '@/constants/slider-data';
 import { useRef } from 'react';
 import { register } from 'swiper/element/bundle';
-
-import GazolineImage from '@/assets/images/gazoline.png';
-import InsuranceImage from '@/assets/images/insurance.png';
-import ParkingImage from '@/assets/images/parking.png';
-import ServicesImage from '@/assets/images/services.png';
+import { ISwiperSlide, SliderProps } from '../types/slider';
 import { Button } from '../ui/Button';
 import { Heading } from '../ui/Heading';
 
 register();
-
-interface SliderProps {
-	className?: string;
-}
-
-interface SwiperSlideProps {
-	title: string;
-	preview: string;
-	bgButton: string;
-	imagePath: string;
-}
-
-const dataSlider: SwiperSlideProps[] = [
-	{
-		title: 'Бесплатный парковка',
-		preview:
-			'Оставляйте машину на платных городских парковках и разрешенных местах, не нарушая ПДД, а также в аэропортах.',
-		bgButton: 'bg-gradient-to-r from-[#13493F] to-[#0C7B1B]',
-		imagePath: ParkingImage,
-	},
-	{
-		title: 'Страховка',
-		preview: 'Полная страховка страховка автомобиля',
-		bgButton: 'bg-gradient-to-r from-[#132949] to-[#0C7B67]',
-		imagePath: InsuranceImage,
-	},
-	{
-		title: 'Бензин',
-		preview: 'Полный бак на любой заправке города за наш счёт',
-		bgButton: 'bg-gradient-to-r from-[#493013] to-[#7B0C3B]',
-		imagePath: GazolineImage,
-	},
-	{
-		title: 'Обслуживание',
-		preview: 'Автомобиль проходит еженедельное ТО',
-		bgButton: 'bg-gradient-to-r from-[#281349] to-[#720C7B]',
-		imagePath: ServicesImage,
-	},
-];
 
 export const Slider = ({ className }: SliderProps) => {
 	const swiperElRef = useRef(null);
@@ -74,7 +32,7 @@ export const Slider = ({ className }: SliderProps) => {
 				autoplay-delay="6000"
 				class={`h-full`}
 			>
-				{dataSlider.map((slide: SwiperSlideProps) => (
+				{dataSlider.map((slide: ISwiperSlide) => (
 					<swiper-slide key={slide.title} class="h-full px-[64px] lg:px-[96px]">
 						<div className="absolute top-0 left-0 z-[-1] w-full h-full">
 							<img
