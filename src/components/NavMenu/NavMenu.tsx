@@ -1,6 +1,7 @@
+import { Button } from '../ui/Button';
 import * as styles from './NavMenu.module.scss';
 import { NavMenuLink } from './NavMenuLink';
-import { dataNavMenu } from './dataNavMenu';
+import { dataNavMenu, socialLinks } from './dataNavMenu';
 
 interface NavMenuProps {
 	handlerNavMenu: () => void;
@@ -31,9 +32,16 @@ const NavMenu = ({ handlerNavMenu }: NavMenuProps) => {
 						})}
 					</ul>
 				</nav>
-				<div className="socialList">
-					<div className="socialList__item"></div>
+				<div className={styles.socialList}>
+					{socialLinks.map(({ link, icon: IconComponent }, index) => (
+						<Button key={index} to={link} className={styles.socialList__item}>
+							<IconComponent />
+						</Button>
+					))}
 				</div>
+				<Button className="hidden p-0 mt-auto max-lg:block text-main">
+					Eng
+				</Button>
 			</div>
 		</div>
 	);

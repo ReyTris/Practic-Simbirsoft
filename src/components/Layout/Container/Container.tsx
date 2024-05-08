@@ -9,7 +9,7 @@ export const Container = ({ className, children }: ContainerProps) => {
 	return (
 		<div
 			className={cn(
-				'h-full w-full px-[16px] lg:px-[32px] xl:px-[64px]',
+				'h-full w-full min-w-[320px] px-[64px] max-md:px-[16px] max-lg:px-[32px]',
 				className
 			)}
 		>

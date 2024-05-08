@@ -10,7 +10,7 @@
 
 	&__line {
 		width: 100%;
-		height: 2px;
+		height: 3px;
 		background-color: white;
 		transition: transform 0.3s ease;
 		border-radius: 3px;
@@ -26,5 +26,21 @@
 
 	&.open .burger__line:nth-child(3) {
 		transform: translateY(-9px) rotate(-45deg);
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.burger {
+		&__line {
+			background-color: black;
+		}
+
+		&.open .burger__line:nth-child(1) {
+			background: white;
+		}
+
+		&.open .burger__line:nth-child(3) {
+			background: white;
+		}
 	}
 }

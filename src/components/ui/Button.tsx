@@ -19,14 +19,7 @@ export const Button = ({
 }: ButtonProps) => {
 	if (to) {
 		return (
-			<a
-				href={to}
-				className={cn(
-					className,
-					variant,
-					'min-h-[48px] pt-[15px] pb-[10px] px-4 rounded-lg text-white'
-				)}
-			>
+			<a href={to} className={cn('button', variant, className)}>
 				{children}
 			</a>
 		);
@@ -34,11 +27,7 @@ export const Button = ({
 		return (
 			<button
 				onClick={onClick}
-				className={cn(
-					className,
-					variant,
-					'min-h-[48px] pt-[15px] pb-[10px] px-4 rounded-lg text-white'
-				)}
+				className={cn('button', className, variant)}
 				disabled={disabled}
 			>
 				{children}

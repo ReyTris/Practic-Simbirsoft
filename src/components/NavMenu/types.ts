@@ -5,7 +5,6 @@ export interface INavMenuLink {
 }
 
 export interface ISocialLink {
-	title: string;
 	link: string;
-	icon: React.ReactNode;
+	icon: React.FC<React.SVGProps<SVGSVGElement>>;
 }

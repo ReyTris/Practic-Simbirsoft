@@ -87,13 +87,13 @@ export const Slider = ({ className }: SliderProps) => {
 						<div className="flex flex-col items-start pt-[237px]">
 							<Heading
 								level="h2"
-								className="text-white text-[32px] lg:text-[40px] "
+								className="text-white max-xl:text-[32px] text-[40px] "
 							>
 								{slide.title}
 							</Heading>
 							<Heading
 								level="p"
-								className="text-grayLight text-[22px] lg:text-[24px] mt-2"
+								className="text-grayLight max-xl:text-[22px] text-[24px] mt-2"
 							>
 								{slide.preview}
 							</Heading>

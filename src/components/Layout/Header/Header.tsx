@@ -9,9 +9,14 @@ interface HeaderProps {
 
 export const Header = ({ className }: HeaderProps) => {
 	return (
-		<div className={cn(className, 'flex justify-between py-[32px]')}>
+		<div
+			className={cn(
+				className,
+				'flex justify-between py-[32px] max-md:flex-col max-md:items-end'
+			)}
+		>
 			<MainLogo />
-			<div className="flex items-center">
+			<div className="flex items-center max-md:mt-2">
 				<PointIcon className="mr-2" />
 				<Heading level="p"> Ульяновск </Heading>
 			</div>
