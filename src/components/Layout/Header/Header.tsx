@@ -11,8 +11,8 @@ export const Header = ({ className }: HeaderProps) => {
 	return (
 		<div
 			className={cn(
-				className,
-				'flex justify-between py-[32px] max-md:flex-col max-md:items-end'
+				'flex justify-between py-[32px] max-md:flex-col max-md:items-end',
+				className
 			)}
 		>
 			<MainLogo />

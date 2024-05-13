@@ -21,7 +21,7 @@ export const MainPage = () => {
 						</Heading>
 						<Button
 							className="mt-[32px] md:mt-[60px] px-14"
-							variant="bg-gradient-to-r from-[#0EC261] to-[#039F67]"
+							variant="green-to-darkgreen"
 						>
 							Забронировать
 						</Button>

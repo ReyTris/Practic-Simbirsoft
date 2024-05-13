@@ -5,6 +5,6 @@ export interface SliderProps {
 export interface ISwiperSlide {
 	title: string;
 	preview: string;
-	bgButton: string;
+	variantButton: string;
 	imagePath: string;
 }

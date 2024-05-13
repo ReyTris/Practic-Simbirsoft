@@ -3,7 +3,7 @@ import PrevArrow from '@/assets/icons/prev.svg';
 import { dataSlider } from '@/constants/slider-data';
 import { useRef } from 'react';
 import { register } from 'swiper/element/bundle';
-import { ISwiperSlide, SliderProps } from '../types/slider';
+import { SliderProps } from '../types/slider';
 import { Button } from '../ui/Button';
 import { Heading } from '../ui/Heading';
 
@@ -32,7 +32,7 @@ export const Slider = ({ className }: SliderProps) => {
 				autoplay-delay="6000"
 				class={`h-full`}
 			>
-				{dataSlider.map((slide: ISwiperSlide) => (
+				{dataSlider.map((slide) => (
 					<swiper-slide key={slide.title} class="h-full px-[64px] lg:px-[96px]">
 						<div className="absolute top-0 left-0 z-[-1] w-full h-full">
 							<img
@@ -56,7 +56,11 @@ export const Slider = ({ className }: SliderProps) => {
 								{slide.preview}
 							</Heading>
 
-							<Button to="#" className="px-12 mt-8" variant={slide.bgButton}>
+							<Button
+								to="#"
+								className="px-12 mt-8"
+								variant={slide.variantButton}
+							>
 								Подробнее
 							</Button>
 						</div>

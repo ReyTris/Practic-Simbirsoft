@@ -14,7 +14,6 @@ const routes = createBrowserRouter([
 			{ path: PathNames.GASOLINE_PAGE, element: <InsurancePage /> },
 			{ path: PathNames.PARKING_PAGE, element: <InsurancePage /> },
 			{ path: PathNames.SERVICE_PAGE, element: <InsurancePage /> },
-			// { path: '*', element: <ErrorPage /> },
 		],
 	},
 ]);

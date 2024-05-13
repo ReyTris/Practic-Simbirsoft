@@ -1,4 +1,5 @@
 @import '@/styles/mixins.scss';
+@import '@/styles/variables.scss';
 
 .navMenuWrapper {
 	position: absolute;
@@ -63,13 +64,13 @@
 	}
 }
 
-@media (max-width: 1280px) {
+@media (max-width: $w-xl) {
 	.navMenu {
 		width: calc(100% / 5 * 3 + 32px);
 		padding: 300px 97px;
 	}
 }
-@media (max-width: 1024px) {
+@media (max-width: $w-lg) {
 	.navMenu {
 		width: 100%;
 		padding: 80px 28px 28px;

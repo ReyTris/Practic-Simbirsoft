@@ -12,20 +12,18 @@ export const Layout = () => {
 	const [showMenu, setShowMenu] = useState<boolean>(false);
 
 	const handlerNavMenu = () => {
-		setShowMenu(!showMenu);
+		setShowMenu((prev) => !prev);
 	};
 	return (
 		<main className="min-h-[100vh] flex overflow-hidden m-auto">
-			<Sidebar burgerStatus={showMenu} handlerNavMenu={handlerNavMenu} />
+			<Sidebar isBurgerOpen={showMenu} handlerNavMenu={handlerNavMenu} />
 			{showMenu && <NavMenu handlerNavMenu={handlerNavMenu} />}
 			<div className="flex-grow w-wrapper">
 				{path != PathNames.MAIN_PAGE && (
-					<>
-						<Container>
-							<Header />
-							<Outlet />
-						</Container>
-					</>
+					<Container>
+						<Header />
+						<Outlet />
+					</Container>
 				)}
 				<Outlet />
 			</div>
