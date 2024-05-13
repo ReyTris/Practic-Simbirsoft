@@ -30,7 +30,10 @@ export const MainPage = () => {
 						<Heading className="text-gray" level="p">
 							© 2016-2019 «Need for drive»
 						</Heading>
-						<Button to="tel:84952342244" className="text-black px-0">
+						<Button
+							to="tel:84952342244"
+							className="text-black px-0 transition-colors hover:text-main"
+						>
 							8 (495) 234-22-44
 						</Button>
 					</div>

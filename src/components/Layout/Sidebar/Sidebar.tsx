@@ -8,9 +8,11 @@ export interface SidebarProps {
 
 export const Sidebar = ({ handlerNavMenu, isBurgerOpen }: SidebarProps) => {
 	return (
-		<div className="flex flex-col w-sidebar bg-[#151B1F] px-[20px] py-[32px] max-md:bg-transparent max-md:absolute">
+		<div className="flex flex-col items-center w-sidebar bg-[#151B1F] py-[32px] max-md:bg-transparent max-md:absolute">
 			<Burger handlerNavMenu={handlerNavMenu} isOpen={isBurgerOpen} />
-			<Button className="p-0 mt-auto max-lg:hidden text-main">Eng</Button>
+			<Button className="p-[10px] mt-auto max-lg:hidden text-main border-white rounded-[50%] transition-colors hover:border-2 hover:text-white active:text-main">
+				Eng
+			</Button>
 		</div>
 	);
 };
