@@ -32,11 +32,20 @@ export default (env: EnvVariables) => {
 		module: {
 			rules: [
 				{
+					test: /\.(png|jpg|jpeg|gif)$/i,
+					type: 'asset/resource',
+				},
+				{
+					test: /\.(woff|woff2|eot|ttf|otf)$/i,
+					type: 'asset/resource',
+				},
+				{
 					test: /\.s[ac]ss$/i,
 					use: [
 						isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
 						'css-loader',
 						'sass-loader',
+						'postcss-loader',
 					],
 				},
 				// {
@@ -58,6 +67,10 @@ export default (env: EnvVariables) => {
 						},
 					},
 				},
+				{
+					test: /\.svg$/,
+					use: ['@svgr/webpack'],
+				},
 			],
 		},
 		resolve: {
@@ -70,6 +83,7 @@ export default (env: EnvVariables) => {
 		devServer: {
 			port: env.port ?? 3000,
 			open: true,
+			historyApiFallback: true,
 		},
 	};
 

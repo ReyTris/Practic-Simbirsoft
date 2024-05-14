@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'mixins.scss';
+@import 'variables.scss';
+@import 'fonts.scss';
+
+* {
+	box-sizing: border-box;
+
+	font-family: 'Roboto', sans-serif;
+}
+
+ul {
+	list-style-type: none;
+}
+
+li {
+	text-decoration: none;
+}
+
+h1 {
+	font-size: 70px;
+	font-weight: 700;
+	line-height: 82px;
+}
+
+@layer components {
+	.button {
+		min-height: 48px;
+		padding: 10px 16px;
+		color: white;
+		border-radius: 8px;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	h1 {
+		font-size: 32px;
+		line-height: 32px;
+	}
+}
