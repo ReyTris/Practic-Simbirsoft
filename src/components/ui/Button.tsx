@@ -34,7 +34,10 @@ export const Button = ({
 
 	if (to) {
 		return (
-			<a href={to} className={cn('button', buttonVariant, className)}>
+			<a
+				href={to}
+				className={cn('button inline-block', buttonVariant, className)}
+			>
 				{children}
 			</a>
 		);

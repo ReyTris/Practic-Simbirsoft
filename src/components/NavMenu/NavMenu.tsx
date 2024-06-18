@@ -39,7 +39,7 @@ const NavMenu = ({ handlerNavMenu }: NavMenuProps) => {
 						</Button>
 					))}
 				</div>
-				<Button className="hidden p-0 mt-auto max-lg:block text-main">
+				<Button className='hidden p-0 mt-auto max-lg:block text-main'>
 					Eng
 				</Button>
 			</div>
