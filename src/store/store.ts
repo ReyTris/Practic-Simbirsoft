@@ -4,7 +4,7 @@ import orderReducer from './OrderSlice';
 
 export const store = configureStore({
 	reducer: {
-		orderReducer,
+		order: orderReducer,
 	},
 	middleware: getDefaultMiddleware =>
 		getDefaultMiddleware({
