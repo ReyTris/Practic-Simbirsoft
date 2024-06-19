@@ -1,6 +1,7 @@
 import Layout from '@/components/Layout';
 import { InsurancePage } from '@/pages/InsurancePage/InsurancePage';
 import MainPage from '@/pages/MainPage';
+import ModelPage from '@/pages/ModelPage';
 import PositionPage from '@/pages/PositionPage';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { PathNames } from './pathNames';
@@ -20,7 +21,7 @@ const routes = createBrowserRouter([
 				children: [
 					{ index: true, element: <Navigate to={PathNames.POSITION_PAGE} /> },
 					{ path: PathNames.POSITION_PAGE, element: <PositionPage /> },
-					{ path: PathNames.MODEL_PAGE, element: <PositionPage /> },
+					{ path: PathNames.MODEL_PAGE, element: <ModelPage /> },
 					{ path: PathNames.ADDITIONAL_PAGE, element: <PositionPage /> },
 					{ path: PathNames.SUMMARY_PAGE, element: <PositionPage /> },
 				],

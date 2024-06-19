@@ -1,17 +1,34 @@
 import { Input } from '@/components/ui/Input';
+import { useAppDispatch } from '@/hooks/useDispatch';
+import { updatePosition } from '@/store/OrderSlice';
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 export const PositionPage = () => {
 	const [city, setCity] = useState('');
 	const [street, setStreet] = useState('');
 
+	const dispatch = useAppDispatch()
+
+	// dispatch(clearDataAfterPosition())
+
 	const onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {
 		setCity(e.target.value);
+		dispatch(updatePosition({city: e.target.value}))
 	};
 	const onChangeStreet = (e: ChangeEvent<HTMLInputElement>) => {
 		setStreet(e.target.value);
+		
+		dispatch(updatePosition({street: e.target.value}))
 	};
+
+	useEffect(() => {
+		if (city !== '' && street !== '') {
+			dispatch(updatePosition({status: true}))
+		}
+	},[city, street])
+
+	
 
 	return (
 		<div>
