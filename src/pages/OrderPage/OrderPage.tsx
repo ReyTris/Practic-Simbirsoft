@@ -5,10 +5,15 @@ import { OrderNavMenu } from '@/components/OrderNavMenu/OrderNavMenu';
 import { useAppDispatch } from '@/hooks/useDispatch';
 import { PathNames } from '@/router/pathNames';
 import { clearDataAfterModel, clearDataAfterPosition } from '@/store/OrderSlice';
+import { UnknownAction } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-const clearData = {
+// interface IClearData {
+
+// }
+
+const clearData: Record<string, () => UnknownAction> = {
 	[PathNames.POSITION_PAGE]: clearDataAfterPosition,
 	[PathNames.MODEL_PAGE]: clearDataAfterModel
 }

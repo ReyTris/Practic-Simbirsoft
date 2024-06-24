@@ -100,7 +100,7 @@ export const orderSlice = createSlice({
 			}}
 		},
 		clearDataAfterPosition: (state) => {
-			state.data = {...initialState.data};	
+			delete state.data[PathNames.MODEL_PAGE];	
 		},
 		clearDataAfterModel: (state) => {
 				
