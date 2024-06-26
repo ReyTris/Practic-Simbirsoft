@@ -1,12 +1,19 @@
-import { Input } from '@/components/ui/Input';
 import { useAppDispatch } from '@/hooks/useDispatch';
 import { updatePosition } from '@/store/OrderSlice';
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { AutoComplete } from 'antd';
+import { useEffect, useState } from 'react';
+
+import * as styles from './PositionPage.module.scss';
 
 const citiesList = ['Ульяновск', 'Самара', 'Москва', 'Казань'];
 
-const streetList = {
+interface IStreetEntry {
+	street: string;
+	coordinate: [number, number];
+}
+
+const streetList: Record<string, IStreetEntry[]> = {
 	Ульяновск: [
 		{ street: 'Пушкарёва, 11', coordinate: [54.314396, 48.353366] },
 		{ street: 'Воробьёва, 84', coordinate: [54.317786, 48.381715] },
@@ -48,109 +55,82 @@ const streetList = {
 export const PositionPage = () => {
 	const [city, setCity] = useState('');
 	const [street, setStreet] = useState('');
-	const [cityOptions, setCityOptions] = useState(false);
-	const [streetOptions, setStreetOptions] = useState(false);
 	const [coordinate, setCoordinate] = useState([54.313836, 48.353282]);
 
 	const dispatch = useAppDispatch();
 
-	// dispatch(clearDataAfterPosition())
+	const [optionsCity, setOptionsCity] = useState<string[]>([]);
+	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>([]);
 
-	const onChangeCity = (e: ChangeEvent<HTMLInputElement>) => {
-		setCity(e.target.value);
-		dispatch(updatePosition({ city: e.target.value }));
-	};
-
-	const onSetCity = (value: string) => {
-		setCity(value);
-		dispatch(updatePosition({ city: value }));
-		setCityOptions(false);
-	};
-	const onChangeStreet = (e: ChangeEvent<HTMLInputElement>) => {
-		setStreet(e.target.value);
-		dispatch(updatePosition({ street: e.target.value }));
+	const onSelectCity = (data: string) => {
+		setCity(data);
+		setStreet('');
+		setOptionsStreet([]);
+		dispatch(updatePosition({ city: data }));
 	};
 
-	const onSetStreet = (street: any) => {
-		setStreet(street.street);
-		dispatch(updatePosition({ street: street.street }));
-		setCoordinate(street.coordinate);
-		setCityOptions(false);
+	const onSelectStreet = (data: string) => {
+		const selectedStreet = streetList[city].find(
+			(street) => street.street === data
+		);
+		if (selectedStreet) {
+			setStreet(selectedStreet.street);
+			setCoordinate(selectedStreet.coordinate);
+			dispatch(updatePosition({ street: selectedStreet.street }));
+		}
 	};
+
+	const getPanelValue = (searchText: string) =>
+		!searchText
+			? []
+			: citiesList.filter((item) =>
+					item.toLowerCase().includes(searchText.toLowerCase())
+			  );
+
+	const getPanelValueStreet = (searchText: string) =>
+		!searchText
+			? []
+			: streetList[city].filter((item) =>
+					item.street.toLowerCase().includes(searchText.toLowerCase())
+			  );
 
 	useEffect(() => {
-		if (city !== '') {
-			setCityOptions(true);
-		} else {
-			setCityOptions(false);
-		}
-		if (street !== '') {
-			setStreetOptions(true);
-		} else {
-			setStreetOptions(false);
-		}
+		onSelectCity(city);
+		setOptionsCity(getPanelValue(city));
+	}, [city]);
+
+	useEffect(() => {
 		if (city !== '' && street !== '') {
 			dispatch(updatePosition({ status: true }));
 		}
-	}, [city, street, cityOptions, coordinate]);
+	}, [city, street]);
 
 	return (
 		<div>
 			<div className="relative">
-				<Input
-					type="text"
-					value={city}
-					label="Город"
-					name="city"
-					placeholder="Начните вводить город ..."
-					onChange={onChangeCity}
+				<AutoComplete
+					options={optionsCity.map((city) => ({ value: city }))}
+					style={{ width: 200 }}
+					onSelect={onSelectCity}
+					onSearch={(text) => setOptionsCity(getPanelValue(text))}
+					onChange={() => setStreet('')}
+					placeholder="input here"
+					className={styles.selectSearch}
 				/>
-
-				{cityOptions && (
-					<div className="absolute z-10 border-black border-2 bg-white min-w-[100px]">
-						{citiesList
-							.filter((item, index) =>
-								item.toLowerCase().includes(city.toLowerCase())
-							)
-							.map((item, index) => (
-								<p
-									className="p-2 cursor-pointer"
-									key={index}
-									onClick={() => onSetCity(item)}
-								>
-									{item}
-								</p>
-							))}
-					</div>
-				)}
 			</div>
 			<div className="relative">
-				<Input
-					type="text"
+				<AutoComplete
+					options={optionsStreet.map((city) => ({ value: city.street }))}
+					style={{ width: 200 }}
+					onSelect={onSelectStreet}
+					onSearch={(text) => setOptionsStreet(getPanelValueStreet(text))}
 					value={street}
-					label="Улица"
-					name="street"
-					placeholder="Начните вводить улицы ..."
-					onChange={onChangeStreet}
+					onChange={(data) => {
+						setStreet(data);
+					}}
+					disabled={!city}
+					placeholder="input here"
 				/>
-
-				{streetOptions && (
-					<div className="absolute z-10 border-black border-2 bg-white min-w-[100px]">
-						{streetList[city]
-							?.filter((item, index) =>
-								item.street.toLowerCase().includes(street.toLowerCase())
-							)
-							.map((item, index) => (
-								<p
-									className="p-2 cursor-pointer"
-									key={index}
-									onClick={() => onSetStreet(item)}
-								>
-									{item.street}
-								</p>
-							))}
-					</div>
-				)}
 			</div>
 			<YMaps query={{ apikey: 'e0d09efb-487f-4235-8ae5-edaa6356c8a1' }}>
 				<Map

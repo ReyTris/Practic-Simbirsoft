@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { NavLink } from 'react-router-dom';
 
 interface ButtonProps {
 	to?: string;
@@ -34,12 +35,14 @@ export const Button = ({
 
 	if (to) {
 		return (
-			<a
-				href={to}
-				className={cn('button inline-block', buttonVariant, className)}
+			<NavLink
+				to={to}
+				className={cn('button inline-block', buttonVariant, className, {
+					'pointer-events-none opacity-50': !disabled,
+				})}
 			>
 				{children}
-			</a>
+			</NavLink>
 		);
 	} else {
 		return (
