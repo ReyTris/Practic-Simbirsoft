@@ -37,9 +37,7 @@ export const Button = ({
 		return (
 			<NavLink
 				to={to}
-				className={cn('button inline-block', buttonVariant, className, {
-					'pointer-events-none opacity-50': !disabled,
-				})}
+				className={cn('button inline-block', buttonVariant, className)}
 			>
 				{children}
 			</NavLink>

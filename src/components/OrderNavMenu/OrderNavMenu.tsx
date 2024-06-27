@@ -1,15 +1,15 @@
 import { dataOrderMenu } from '@/constants/nav-menu-data';
+import { getLastPathPart } from '@/features/getLastPathPart';
 import { OrderMenuLink } from './OrderMenuLink';
 
 interface OrderNavMenuProps {
 	currentPath?: string;
+	className?: string;
 }
 
-export const OrderNavMenu = ({ currentPath }: OrderNavMenuProps) => {
-	const getLastPathPart = (path: string) => path.split('/').pop();
-
-	const currentIndex = dataOrderMenu.findIndex(item => {
-		return getLastPathPart(item.link) === getLastPathPart(currentPath);
+export const OrderNavMenu = ({ currentPath, className }: OrderNavMenuProps) => {
+	const currentIndex = dataOrderMenu.findIndex((item) => {
+		return getLastPathPart(item.link) === currentPath;
 	});
 
 	// const handleClick = (path: any) => {
@@ -18,16 +18,16 @@ export const OrderNavMenu = ({ currentPath }: OrderNavMenuProps) => {
 	// 	setCurrentPath(path);
 	// };
 	return (
-		<div>
-			<ul className='flex'>
+		<div className={className}>
+			<ul className="flex">
 				{dataOrderMenu.map(({ title, link, icon: IconComponent }, index) => (
-					<li key={title} className='flex items-center'>
+					<li key={title} className="flex items-center">
 						<OrderMenuLink
 							title={title}
 							link={link}
 							isActived={index <= currentIndex}
 						/>
-						{IconComponent && <IconComponent className='mx-3' />}
+						{IconComponent && <IconComponent className="mx-3" />}
 					</li>
 				))}
 			</ul>

@@ -1,7 +1,9 @@
+import { getLastPathPart } from '@/features/getLastPathPart';
 import { useAppSelector } from '@/hooks/useDispatch';
 import { PathNames } from '@/router/pathNames';
 import { IAddressField, IOrderData, IOrderField } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
+import cn from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Button } from '../ui/Button';
 
@@ -11,7 +13,7 @@ interface OrderBarProps {
 
 export const OrderBar = ({ className }: OrderBarProps) => {
 	const location = useLocation();
-	let lastPartPath = location.pathname.split('/').pop();
+	let lastPartPath = getLastPathPart(location.pathname);
 	if (lastPartPath == PathNames.ORDER_PAGE)
 		lastPartPath = PathNames.POSITION_PAGE;
 
@@ -26,30 +28,36 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 	}
 
 	return (
-		<div className={className}>
+		<ul className={className}>
 			{orderList.map((item, index) => (
-				<div key={index}>
+				<li key={index}>
 					{Object.keys(item).map((fieldKey) => {
 						const field = item[fieldKey as keyof typeof item] as
 							| IAddressField
 							| IOrderField;
-						return <p key={fieldKey}>{field.name + ': ' + field.value}</p>;
+						return (
+							<div key={fieldKey} className="flex justify-between items-end">
+								<span className="inline-block"> {field.name + ': '}</span>
+								<div className="border-b-[1px] border-dotted border-gray flex-1 mx-2 mb-[6px]"></div>
+								<span className="inline-block max-w-[112px] text-gray text-right">
+									{field.value}
+								</span>
+							</div>
+						);
 					})}
-				</div>
+				</li>
 			))}
-
+			<li className="font-semibold mt-8">Цена: от 8 000 до 12 000 ₽</li>
 			<Button
 				to={orderData[lastPartPath as keyof IOrderData].button.link}
-				disabled={orderData[lastPartPath as keyof IOrderData].button.status}
-				variant="darkgreen-to-green"
+				variant="green-to-darkgreen"
+				className={cn('mt-8 w-[100%] text-center', {
+					'pointer-events-none opacity-50 bg-none bg-gray':
+						!orderData[lastPartPath as keyof IOrderData].button.status,
+				})}
 			>
 				{orderData[lastPartPath as keyof IOrderData].button.label}
 			</Button>
-
-			{/* <NavLink to={orderData[lastPartPath as keyof IOrderData].button.link}>
-				{orderData[lastPartPath as keyof IOrderData].button.label}
-				{orderData[lastPartPath as keyof IOrderData].button.status ? ' ✔' : ''}
-			</NavLink>	 */}
-		</div>
+		</ul>
 	);
 };
