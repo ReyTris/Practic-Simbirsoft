@@ -3,10 +3,10 @@ import { InsurancePage } from '@/pages/InsurancePage/InsurancePage';
 import MainPage from '@/pages/MainPage';
 import ModelPage from '@/pages/ModelPage';
 import PositionPage from '@/pages/PositionPage';
-import { Navigate, createBrowserRouter } from 'react-router-dom';
+import { Navigate, createHashRouter } from 'react-router-dom';
 import { PathNames } from './pathNames';
 
-const routes = createBrowserRouter([
+const routes = createHashRouter([
 	{
 		path: PathNames.MAIN_PAGE,
 		element: <Layout />,

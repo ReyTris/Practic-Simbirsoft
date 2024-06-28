@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"homepage": "https://gitname.github.io/react-gh-pages",
+	"homepage": "https://gitname.github.io/Practic-Simbirsoft",
 	"scripts": {
 		"build:dev": "webpack --env mode=development",
 		"build:prod": "webpack --env mode=production",
