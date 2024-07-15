@@ -17,36 +17,32 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 	if (lastPartPath == PathNames.ORDER_PAGE)
 		lastPartPath = PathNames.POSITION_PAGE;
 
-	const orderData: IOrderData = useAppSelector(
+	const orderData = useAppSelector(
 		(state: RootState) => state.order.data
 	);
 
-	const orderList = [];
-
-	for (const key in orderData) {
-		orderList.push(orderData[key as keyof IOrderData].fields);
-	}
+	const getOrderFields = useAppSelector(
+		(state: RootState) => state.order.combinedFields
+	)
 
 	return (
 		<ul className={className}>
-			{orderList.map((item, index) => (
-				<li key={index}>
-					{Object.keys(item).map((fieldKey) => {
-						const field = item[fieldKey as keyof typeof item] as
+				{ Object.keys(getOrderFields).map((fieldKey) => {
+						const field = getOrderFields[fieldKey as keyof typeof getOrderFields] as
 							| IAddressField
 							| IOrderField;
 						return (
-							<div key={fieldKey} className="flex justify-between items-end">
-								<span className="inline-block"> {field.name + ': '}</span>
-								<div className="border-b-[1px] border-dotted border-gray flex-1 mx-2 mb-[6px]"></div>
-								<span className="inline-block max-w-[112px] text-gray text-right">
-									{field.value}
-								</span>
-							</div>
-						);
-					})}
-				</li>
-			))}
+						<li key={fieldKey}>
+								<div key={fieldKey} className="flex justify-between items-end">
+									<span className="inline-block"> {field.name + ': '}</span>
+									<div className="border-b-[1px] border-dotted border-gray flex-1 mx-2 mb-[6px]"></div>
+									<span className="inline-block max-w-[112px] text-gray text-right">
+										{field.value}
+									</span>
+								</div>
+						</li>
+					);
+				})}
 			<li className="font-semibold mt-8">Цена: от 8 000 до 12 000 ₽</li>
 			<Button
 				to={orderData[lastPartPath as keyof IOrderData].button.link}

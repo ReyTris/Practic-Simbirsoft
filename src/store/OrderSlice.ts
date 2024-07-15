@@ -39,6 +39,7 @@ export interface IOrderData {
 
 interface IInitialState {
 	data: IOrderData;
+	combinedFields: {}
 }
 
 const initialState: IInitialState = {
@@ -59,7 +60,22 @@ const initialState: IInitialState = {
 				link: `${PathNames.ORDER_PAGE}/${PathNames.MODEL_PAGE}`,
 			},
 		},
+		[PathNames.MODEL_PAGE]: {
+			fields: {
+				model: {
+					name: 'Модель',
+					value: '',
+				}
+			},
+			button: {
+				status: false,
+				label: 'Дополнительно',
+				link: `${PathNames.ORDER_PAGE}/${PathNames.ADDITIONAL_PAGE}`,
+			},
+		},
 	},
+
+	combinedFields: {}
 };
 
 export const orderSlice = createSlice({
@@ -81,33 +97,32 @@ export const orderSlice = createSlice({
 			address.value = `${address.city}${address.city && address.street ? ', ' : ''}${address.street}`;
 
 			state.data[PathNames.POSITION_PAGE].button.status = status;
+
+			state.combinedFields = {
+				...state.data[PathNames.POSITION_PAGE].fields,
+			}
 		},
 		updateModel: (state, action: PayloadAction<{model?: string, status?: boolean}>) => {
 			const {model, status} = action.payload;
 
-			state.data = {...state.data, [PathNames.MODEL_PAGE]: {
-				fields: {
-					model: {
-						name: 'Модель',
-						value: model,
-					}
-				},
-				button: {
-					status: status,
-					label: 'Дополнительно',
-					link: `${PathNames.ORDER_PAGE}/${PathNames.ADDITIONAL_PAGE}`,
-				},
-			}}
+			state.data[PathNames.MODEL_PAGE].fields.model.value = model;
+			state.data[PathNames.MODEL_PAGE].button.status = status;
+			
+			
+			state.combinedFields = {
+				...state.data[PathNames.POSITION_PAGE].fields,
+				...state.data[PathNames.MODEL_PAGE].fields
+			}
 		},
-		clearDataAfterPosition: (state) => {
-			delete state.data[PathNames.MODEL_PAGE];	
-		},
+		// clearDataAfterPosition: (state) => {
+		// 	state.data[PathNames.MODEL_PAGE].fields.model.value = '';
+		// },
 		clearDataAfterModel: (state) => {
 				
 		}
 	},
 });
 
-export const { updatePosition, updateModel, clearDataAfterPosition, clearDataAfterModel } = orderSlice.actions;
+export const { updatePosition, updateModel, clearDataAfterModel } = orderSlice.actions;
 
 export default orderSlice.reducer;

@@ -4,10 +4,11 @@ import { useEffect } from 'react'
 
 export const ModelPage = () => {
     const dispatch = useAppDispatch()
-    dispatch(updateModel({model: '', status: false}))
 
     useEffect(() => {
-    })
+      
+    dispatch(updateModel({}))
+    }, [dispatch])
   return (
     <div>ModelPage</div>
   )

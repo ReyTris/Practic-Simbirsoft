@@ -55,6 +55,10 @@ export const PositionPage = () => {
 			  );
 
 	useEffect(() => {
+		dispatch(updatePosition({}));
+	}, []);
+
+	useEffect(() => {
 		setOptionsCity(getPanelValue(city));
 	}, [city]);
 
