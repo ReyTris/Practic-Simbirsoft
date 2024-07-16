@@ -4,7 +4,7 @@ import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { AutoComplete, Input } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { IStreetEntry, citiesList, streetList } from './position-data';
+import { IStreetEntry, citiesList, streetList } from '@/constants/initialMapPoints';
 
 export const PositionPage = () => {
 	const [city, setCity] = useState('');

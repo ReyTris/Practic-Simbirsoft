@@ -9,7 +9,7 @@ interface NavMenuProps {
 
 const NavMenu = ({ handlerNavMenu }: NavMenuProps) => {
 	const handleMenuClose = (event: React.MouseEvent<HTMLElement>) => {
-		const targetElement = event.target as HTMLElement;
+		const targetElement = event.currentTarget;
 		if (!targetElement.closest(`.${styles.navMenu}`)) {
 			handlerNavMenu();
 		}

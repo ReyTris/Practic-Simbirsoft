@@ -33,7 +33,7 @@ interface IModel {
 }
 
 export interface IOrderData {
-	[PathNames.POSITION_PAGE]: IPosition;
+	[PathNames.POSITION_PAGE]?: IPosition;
 	[PathNames.MODEL_PAGE]?: IModel
 }
 
@@ -114,9 +114,6 @@ export const orderSlice = createSlice({
 				...state.data[PathNames.MODEL_PAGE].fields
 			}
 		},
-		// clearDataAfterPosition: (state) => {
-		// 	state.data[PathNames.MODEL_PAGE].fields.model.value = '';
-		// },
 		clearDataAfterModel: (state) => {
 				
 		}

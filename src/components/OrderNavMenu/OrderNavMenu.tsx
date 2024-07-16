@@ -12,11 +12,6 @@ export const OrderNavMenu = ({ currentPath, className }: OrderNavMenuProps) => {
 		return getLastPathPart(item.link) === currentPath;
 	});
 
-	// const handleClick = (path: any) => {
-	// 	console.log(path);
-
-	// 	setCurrentPath(path);
-	// };
 	return (
 		<div className={className}>
 			<ul className="flex">

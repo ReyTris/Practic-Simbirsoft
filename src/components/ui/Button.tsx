@@ -1,13 +1,16 @@
 import cn from 'classnames';
 import { NavLink } from 'react-router-dom';
 
+
+type Variant = 'darkgreen-to-green' | 'blue-to-ocean' | 'orange-to-red' | 'darkpurple-to-purple' | 'green-to-darkgreen';
+
 interface ButtonProps {
 	to?: string;
 	className?: string;
 	onClick?: () => void;
 	disabled?: boolean;
 	children: React.ReactNode;
-	variant?: string;
+	variant?: Variant;
 }
 
 export const Button = ({
@@ -18,7 +21,7 @@ export const Button = ({
 	children,
 	variant,
 }: ButtonProps) => {
-	const variantStyles = {
+	const variantStyles: Record<Variant, string> = {
 		'darkgreen-to-green':
 			'bg-gradient-to-r from-[#13493F] to-[#0C7B1B] transition-all hover:brightness-90 active:brightness-75',
 		'blue-to-ocean':
@@ -31,7 +34,7 @@ export const Button = ({
 			'bg-gradient-to-r from-[#0EC261] to-[#039F67] transition-all hover:brightness-90 active:brightness-75',
 	};
 
-	const buttonVariant = variantStyles[variant as keyof typeof variantStyles];
+	const buttonVariant = variantStyles[variant];
 
 	if (to) {
 		return (
