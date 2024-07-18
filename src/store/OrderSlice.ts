@@ -1,10 +1,9 @@
 import { PathNames } from '@/router/pathNames';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-  
 export interface IOrderField {
-  name: string;
-  value: string;
+	name: string;
+	value: string;
 }
 
 export interface IAddressField extends IOrderField {
@@ -20,26 +19,27 @@ interface IButtonOrder {
 
 interface IPosition {
 	fields: {
-		address: IAddressField
-	}
+		address: IAddressField;
+	};
 	button: IButtonOrder;
 }
 
 interface IModel {
 	fields: {
-		model: IOrderField
-	}
+		model: IOrderField;
+	};
 	button: IButtonOrder;
 }
 
 export interface IOrderData {
 	[PathNames.POSITION_PAGE]?: IPosition;
-	[PathNames.MODEL_PAGE]?: IModel
+	[PathNames.MODEL_PAGE]?: IModel;
 }
 
 interface IInitialState {
 	data: IOrderData;
-	combinedFields: {}
+	currentCoordinate: [number, number];
+	combinedFields: {};
 }
 
 const initialState: IInitialState = {
@@ -51,8 +51,8 @@ const initialState: IInitialState = {
 					name: 'Пункт выдачи',
 					value: '',
 					city: '',
-          			street: '',
-				}
+					street: '',
+				},
 			},
 			button: {
 				status: false,
@@ -65,7 +65,7 @@ const initialState: IInitialState = {
 				model: {
 					name: 'Модель',
 					value: '',
-				}
+				},
 			},
 			button: {
 				status: false,
@@ -75,15 +75,25 @@ const initialState: IInitialState = {
 		},
 	},
 
-	combinedFields: {}
+	currentCoordinate: null,
+
+	combinedFields: {},
 };
 
 export const orderSlice = createSlice({
 	name: 'order',
 	initialState,
 	reducers: {
-		updatePosition: (state, action: PayloadAction<{city?: string, street?: string, status?: boolean}>) => {
-			const {city, street, status} = action.payload;
+		updatePosition: (
+			state,
+			action: PayloadAction<{
+				city?: string;
+				street?: string;
+				status?: boolean;
+				coordinate?: [number, number];
+			}>
+		) => {
+			const { city, street, status, coordinate } = action.payload;
 			const address = state.data[PathNames.POSITION_PAGE].fields.address;
 
 			if (city !== undefined) {
@@ -93,33 +103,38 @@ export const orderSlice = createSlice({
 			if (street !== undefined) {
 				address.street = street;
 			}
-		
-			address.value = `${address.city}${address.city && address.street ? ', ' : ''}${address.street}`;
+
+			address.value = `${address.city}${
+				address.city && address.street ? ', ' : ''
+			}${address.street}`;
+
+			state.currentCoordinate = coordinate;
 
 			state.data[PathNames.POSITION_PAGE].button.status = status;
 
 			state.combinedFields = {
 				...state.data[PathNames.POSITION_PAGE].fields,
-			}
+			};
 		},
-		updateModel: (state, action: PayloadAction<{model?: string, status?: boolean}>) => {
-			const {model, status} = action.payload;
+		updateModel: (
+			state,
+			action: PayloadAction<{ model?: string; status?: boolean }>
+		) => {
+			const { model, status } = action.payload;
 
 			state.data[PathNames.MODEL_PAGE].fields.model.value = model;
 			state.data[PathNames.MODEL_PAGE].button.status = status;
-			
-			
+
 			state.combinedFields = {
 				...state.data[PathNames.POSITION_PAGE].fields,
-				...state.data[PathNames.MODEL_PAGE].fields
-			}
+				...state.data[PathNames.MODEL_PAGE].fields,
+			};
 		},
-		clearDataAfterModel: (state) => {
-				
-		}
+		clearDataAfterModel: (state) => {},
 	},
 });
 
-export const { updatePosition, updateModel, clearDataAfterModel } = orderSlice.actions;
+export const { updatePosition, updateModel, clearDataAfterModel } =
+	orderSlice.actions;
 
 export default orderSlice.reducer;

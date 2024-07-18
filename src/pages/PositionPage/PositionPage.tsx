@@ -1,26 +1,39 @@
-import { useAppDispatch } from '@/hooks/useDispatch';
+import ClearInput from '@/assets/icons/clearInput.svg';
+import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { updatePosition } from '@/store/OrderSlice';
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { AutoComplete, Input } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { IStreetEntry, citiesList, streetList } from '@/constants/initialMapPoints';
+import mark from '@/assets/icons/mark.png';
+
+import {
+	IStreetEntry,
+	citiesList,
+	streetList,
+} from '@/constants/initialMapPoints';
+import { RootState } from '@/store/store';
 
 export const PositionPage = () => {
+	const dispatch = useAppDispatch();
+	const currentCoordinate = useAppSelector(
+		(state: RootState) => state.order.currentCoordinate
+	);
+
 	const [city, setCity] = useState('');
 	const [street, setStreet] = useState('');
-	const [coordinate, setCoordinate] = useState([54.313836, 48.353282]);
+	const [coordinate, setCoordinate] = useState(
+		currentCoordinate || [54.313836, 48.353282]
+	);
 
-	const dispatch = useAppDispatch();
-
-	const [optionsCity, setOptionsCity] = useState<string[]>([]);
 	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>([]);
 
 	const onSelectCity = (data: string) => {
 		setCity(data);
 		setStreet('');
-		setOptionsStreet([]);
-		dispatch(updatePosition({ city: data }));
+
+		setOptionsStreet(streetList[data]);
+		dispatch(updatePosition({ street: '' }));
 	};
 
 	const onSelectStreet = (data: string) => {
@@ -30,37 +43,39 @@ export const PositionPage = () => {
 		if (selectedStreet) {
 			setStreet(selectedStreet.street);
 			setCoordinate(selectedStreet.coordinate);
-			dispatch(updatePosition({ street: selectedStreet.street }));
-			dispatch(updatePosition({ status: true }));
+			dispatch(
+				updatePosition({
+					city,
+					street: selectedStreet.street,
+					coordinate: selectedStreet.coordinate,
+					status: true,
+				})
+			);
 		}
 	};
 
-	const onClearStreet = () => {
+	const onClearStreet = (event: React.MouseEvent<HTMLElement>) => {
+		event.stopPropagation();
+
 		setStreet('');
 		dispatch(updatePosition({ street: '' }));
 	};
 
-	const getPanelValue = (searchText: string) =>
-		!searchText
-			? []
-			: citiesList.filter((item) =>
-					item.toLowerCase().includes(searchText.toLowerCase())
-			  );
+	const onClearCity = (event: React.MouseEvent<HTMLElement>) => {
+		event.stopPropagation();
 
-	const getPanelValueStreet = (searchText: string) =>
-		!searchText
-			? []
-			: streetList[city].filter((item) =>
-					item.street.toLowerCase().includes(searchText.toLowerCase())
-			  );
+		setCity('');
+		setStreet('');
+		dispatch(updatePosition({ city: '', street: '' }));
+	};
 
 	useEffect(() => {
 		dispatch(updatePosition({}));
-	}, []);
-
-	useEffect(() => {
-		setOptionsCity(getPanelValue(city));
 	}, [city]);
+
+	// useEffect(() => {
+	// 	setOptionsCity(getPanelValue(city));
+	// }, [city]);
 
 	return (
 		<div>
@@ -69,16 +84,24 @@ export const PositionPage = () => {
 					<label htmlFor="city">Город</label>
 					<AutoComplete
 						id="city"
-						options={optionsCity.map((city) => ({ value: city }))}
+						options={citiesList.map((city) => ({ value: city }))}
 						style={{ width: 224 }}
+						value={city}
 						onSelect={onSelectCity}
-						onSearch={(text) => setOptionsCity(getPanelValue(text))}
-						onChange={() => onClearStreet()}
+						onChange={(data) => {
+							setCity(data);
+						}}
+						filterOption={(inputValue, optionsCity) =>
+							optionsCity!.value
+								.toUpperCase()
+								.indexOf(inputValue.toUpperCase()) !== -1
+						}
 						className="ml-2 border-b-2 border-[#999999]"
 					>
 						<Input
 							placeholder="Начните вводить город ..."
 							className="border-none"
+							suffix={<ClearInput onMouseDown={onClearCity} />}
 						/>
 					</AutoComplete>
 				</div>
@@ -89,17 +112,22 @@ export const PositionPage = () => {
 						options={optionsStreet.map((city) => ({ value: city.street }))}
 						style={{ width: 224 }}
 						onSelect={onSelectStreet}
-						onSearch={(text) => setOptionsStreet(getPanelValueStreet(text))}
 						value={street}
 						onChange={(data) => {
 							setStreet(data);
 						}}
+						filterOption={(inputValue, optionsStreet) =>
+							optionsStreet!.value
+								.toUpperCase()
+								.indexOf(inputValue.toUpperCase()) !== -1
+						}
 						disabled={!city}
 						className="ml-2 border-b-2 border-[#999999]"
 					>
 						<Input
 							placeholder="Начните вводить пункт ..."
 							className="border-none"
+							suffix={<ClearInput onMouseDown={onClearStreet} />}
 						/>
 					</AutoComplete>
 				</div>
@@ -113,7 +141,14 @@ export const PositionPage = () => {
 						height="352px"
 						state={{ center: coordinate, zoom: 15 }}
 					>
-						<Placemark geometry={coordinate} />
+						<Placemark
+							geometry={coordinate}
+							options={{
+								iconLayout: 'default#image',
+								iconImageHref: mark,
+								iconImageSize: [18, 18],
+							}}
+						/>
 					</Map>
 				</YMaps>
 			</div>
