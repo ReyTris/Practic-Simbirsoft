@@ -26,7 +26,11 @@ export const PositionPage = () => {
 		currentCoordinate || [54.313836, 48.353282]
 	);
 
+	const [zoom, setZoom] = useState(5);
+
 	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>([]);
+	
+	const coordinateList = Object.values(streetList).flat();
 
 	const onSelectCity = (data: string) => {
 		setCity(data);
@@ -43,6 +47,7 @@ export const PositionPage = () => {
 		if (selectedStreet) {
 			setStreet(selectedStreet.street);
 			setCoordinate(selectedStreet.coordinate);
+			setZoom(15);
 			dispatch(
 				updatePosition({
 					city,
@@ -53,6 +58,8 @@ export const PositionPage = () => {
 			);
 		}
 	};
+
+	
 
 	const onClearStreet = (event: React.MouseEvent<HTMLElement>) => {
 		event.stopPropagation();
@@ -73,10 +80,11 @@ export const PositionPage = () => {
 		dispatch(updatePosition({}));
 	}, [city]);
 
-	// useEffect(() => {
-	// 	setOptionsCity(getPanelValue(city));
-	// }, [city]);
-
+	useEffect(() => {
+		if (city && street) {
+			dispatch(updatePosition({ city, street, status: true }));
+		}
+	}, [city, street, dispatch]);
 	return (
 		<div>
 			<div className="flex flex-col items-end w-[340px]">
@@ -136,19 +144,37 @@ export const PositionPage = () => {
 				<div className="mb-[16px]">Выбрать на карте:</div>
 				<YMaps query={{ apikey: 'e0d09efb-487f-4235-8ae5-edaa6356c8a1' }}>
 					<Map
-						defaultState={{ center: coordinate, zoom: 15 }}
+						defaultState={{ center: coordinate, zoom: zoom }}
 						width="736px"
 						height="352px"
-						state={{ center: coordinate, zoom: 15 }}
+						state={{ center: coordinate, zoom: zoom }}
 					>
-						<Placemark
-							geometry={coordinate}
-							options={{
-								iconLayout: 'default#image',
-								iconImageHref: mark,
-								iconImageSize: [18, 18],
-							}}
-						/>
+
+						{coordinateList.map((coordinateItem) => (
+							<Placemark
+								key={coordinateItem.street}
+								geometry={coordinateItem.coordinate}
+								options={{
+									iconLayout: 'default#image',
+									iconImageHref: mark,
+									iconImageSize: [18, 18],
+								}}
+								onClick={() => {
+									setCoordinate(coordinateItem.coordinate);
+									setZoom(15);
+
+									for(const [key, value] of Object.entries(streetList)) {
+										if(value.find((street) => street.street === coordinateItem.street)) {
+											setCity(key);
+											setStreet(coordinateItem.street);
+											setOptionsStreet(value);
+											break;
+										}
+									}
+								}}
+							/>
+						))}
+						
 					</Map>
 				</YMaps>
 			</div>

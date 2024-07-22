@@ -1,8 +1,8 @@
 import { getLastPathPart } from '@/features/getLastPathPart';
 import { useAppSelector } from '@/hooks/useDispatch';
 import { PathNames } from '@/router/pathNames';
-import { IAddressField, IOrderData, IOrderField } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
+import { ICombinedFields, IOrderData } from '@/store/types';
 import cn from 'classnames';
 import { useLocation } from 'react-router-dom';
 import { Button } from '../ui/Button';
@@ -28,9 +28,7 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 	return (
 		<ul className={className}>
 				{ Object.keys(getOrderFields).map((fieldKey) => {
-						const field = getOrderFields[fieldKey as keyof typeof getOrderFields] as
-							| IAddressField
-							| IOrderField;
+						const field = getOrderFields[fieldKey as keyof ICombinedFields]
 						return (
 						<li key={fieldKey}>
 								<div key={fieldKey} className="flex justify-between items-end">

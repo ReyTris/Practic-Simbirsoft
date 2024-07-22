@@ -1,49 +1,10 @@
 import { PathNames } from '@/router/pathNames';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { IActionUpdateModel, IActionUpdatePosition, IInitialState } from './types';
 
-export interface IOrderField {
-	name: string;
-	value: string;
-}
 
-export interface IAddressField extends IOrderField {
-	city: string;
-	street: string;
-}
-
-interface IButtonOrder {
-	status: boolean;
-	label: string;
-	link: string;
-}
-
-interface IPosition {
-	fields: {
-		address: IAddressField;
-	};
-	button: IButtonOrder;
-}
-
-interface IModel {
-	fields: {
-		model: IOrderField;
-	};
-	button: IButtonOrder;
-}
-
-export interface IOrderData {
-	[PathNames.POSITION_PAGE]?: IPosition;
-	[PathNames.MODEL_PAGE]?: IModel;
-}
-
-interface IInitialState {
-	data: IOrderData;
-	currentCoordinate: [number, number];
-	combinedFields: {};
-}
 
 const initialState: IInitialState = {
-	// loading: false,
 	data: {
 		[PathNames.POSITION_PAGE]: {
 			fields: {
@@ -86,12 +47,7 @@ export const orderSlice = createSlice({
 	reducers: {
 		updatePosition: (
 			state,
-			action: PayloadAction<{
-				city?: string;
-				street?: string;
-				status?: boolean;
-				coordinate?: [number, number];
-			}>
+			action: PayloadAction<IActionUpdatePosition>
 		) => {
 			const { city, street, status, coordinate } = action.payload;
 			const address = state.data[PathNames.POSITION_PAGE].fields.address;
@@ -118,7 +74,7 @@ export const orderSlice = createSlice({
 		},
 		updateModel: (
 			state,
-			action: PayloadAction<{ model?: string; status?: boolean }>
+			action: PayloadAction<IActionUpdateModel>
 		) => {
 			const { model, status } = action.payload;
 
