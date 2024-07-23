@@ -35,9 +35,10 @@ export interface IOrderData {
 	[PathNames.MODEL_PAGE]?: IModel;
 }
 
-export interface ICombinedFields {
-	address?: IAddressField;
-	model?: IOrderField;
+export type Fields =  'address' | 'model'
+
+export type ICombinedFields = {
+    [key in Fields]?: IOrderField | IAddressField
 }
 
 export interface IInitialState {

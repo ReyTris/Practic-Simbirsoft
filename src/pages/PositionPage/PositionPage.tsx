@@ -145,9 +145,8 @@ export const PositionPage = () => {
 				<YMaps query={{ apikey: 'e0d09efb-487f-4235-8ae5-edaa6356c8a1' }}>
 					<Map
 						defaultState={{ center: coordinate, zoom: zoom }}
-						width="736px"
-						height="352px"
 						state={{ center: coordinate, zoom: zoom }}
+						className='w-[736px] h-[352px] max-lg:w-[100%]'
 					>
 
 						{coordinateList.map((coordinateItem) => (

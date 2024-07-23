@@ -22,7 +22,7 @@ export const OrderPage = () => {
 				currentPath={currentPath}
 				className="py-2 border-y border-grayLight"
 			/>
-			<div className="flex justify-between gap-[32px]">
+			<div className="flex justify-between gap-[32px] max-xl:flex-col">
 				<div className="pt-8">
 					<Outlet />
 				</div>
