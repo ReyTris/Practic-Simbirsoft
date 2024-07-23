@@ -12,21 +12,21 @@ import {
 	citiesList,
 	streetList,
 } from '@/constants/initialMapPoints';
+import { PathNames } from '@/router/pathNames';
 import { RootState } from '@/store/store';
 
 export const PositionPage = () => {
 	const dispatch = useAppDispatch();
-	const currentCoordinate = useAppSelector(
-		(state: RootState) => state.order.currentCoordinate
-	);
+	const { data, currentCoordinate, currentZoom} = useAppSelector((state: RootState) => state.order);
+	const {city: cityData, street: streetData} = data[PathNames.POSITION_PAGE].fields.address;
 
-	const [city, setCity] = useState('');
-	const [street, setStreet] = useState('');
+	const [city, setCity] = useState(cityData || '');
+	const [street, setStreet] = useState(streetData || '');
 	const [coordinate, setCoordinate] = useState(
 		currentCoordinate || [54.313836, 48.353282]
 	);
 
-	const [zoom, setZoom] = useState(5);
+	const [zoom, setZoom] = useState(currentZoom || 5);
 
 	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>([]);
 	
@@ -35,6 +35,8 @@ export const PositionPage = () => {
 	const onSelectCity = (data: string) => {
 		setCity(data);
 		setStreet('');
+		setZoom(11)
+		setCoordinate(streetList[data][0].coordinate);
 
 		setOptionsStreet(streetList[data]);
 		dispatch(updatePosition({ street: '' }));
@@ -73,6 +75,7 @@ export const PositionPage = () => {
 
 		setCity('');
 		setStreet('');
+		setZoom(5);
 		dispatch(updatePosition({ city: '', street: '' }));
 	};
 
@@ -82,8 +85,9 @@ export const PositionPage = () => {
 
 	useEffect(() => {
 		if (city && street) {
-			dispatch(updatePosition({ city, street, status: true }));
+			dispatch(updatePosition({ city, street, coordinate, zoom, status: true }));
 		}
+		
 	}, [city, street, dispatch]);
 	return (
 		<div>

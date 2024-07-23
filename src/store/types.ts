@@ -45,6 +45,7 @@ export interface IInitialState {
 	data: IOrderData;
 	currentCoordinate: [number, number];
 	combinedFields: ICombinedFields;
+    currentZoom: number;
 }
 
 //actions
@@ -53,6 +54,7 @@ export interface IActionUpdatePosition {
     street?: string;
     status?: boolean;
     coordinate?: [number, number];
+    zoom?: number;
 }
 
 export interface IActionUpdateModel {

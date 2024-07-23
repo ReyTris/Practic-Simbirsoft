@@ -27,17 +27,18 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 
 	return (
 		<ul className={className}>
-			{ Object.keys(getOrderFields).map((fieldKey: Fields) => {
+			{Object.keys(getOrderFields).map((fieldKey: Fields) => {
 					const field = getOrderFields[fieldKey]
+					if (!field.value) return null
 					return (
 					<li key={fieldKey}>
-							<div key={fieldKey} className="flex justify-between items-end">
-								<span className="inline-block"> {field.name + ': '}</span>
-								<div className="border-b-[1px] border-dotted border-gray flex-1 mx-2 mb-[6px]"></div>
-								<span className="inline-block max-w-[112px] text-gray text-right">
-									{field.value}
-								</span>
-							</div>
+						<div key={fieldKey} className="flex justify-between items-end">
+							<span className="inline-block"> {field.name + ': '}</span>
+							<div className="border-b-[1px] border-dotted border-gray flex-1 mx-2 mb-[6px]"></div>
+							<span className="inline-block max-w-[112px] text-gray text-right">
+								{field.value}
+							</span>
+						</div>
 					</li>
 				);
 			})}

@@ -37,6 +37,7 @@ const initialState: IInitialState = {
 	},
 
 	currentCoordinate: null,
+	currentZoom: null,
 
 	combinedFields: {},
 };
@@ -49,7 +50,7 @@ export const orderSlice = createSlice({
 			state,
 			action: PayloadAction<IActionUpdatePosition>
 		) => {
-			const { city, street, status, coordinate } = action.payload;
+			const { city, street, status, coordinate, zoom } = action.payload;
 			const address = state.data[PathNames.POSITION_PAGE].fields.address;
 
 			if (city !== undefined) {
@@ -65,6 +66,7 @@ export const orderSlice = createSlice({
 			}${address.street}`;
 
 			state.currentCoordinate = coordinate;
+			state.currentZoom = zoom;
 
 			state.data[PathNames.POSITION_PAGE].button.status = status;
 

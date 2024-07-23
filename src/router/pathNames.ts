@@ -10,3 +10,5 @@ export enum PathNames {
 	ADDITIONAL_PAGE = 'additional',
 	SUMMARY_PAGE = 'summary',
 }
+
+export type PathNamesValues = typeof PathNames[keyof typeof PathNames];

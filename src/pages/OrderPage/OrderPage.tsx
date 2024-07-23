@@ -1,7 +1,7 @@
 import Container from '@/components/Layout/Container';
 import Header from '@/components/Layout/Header';
 import OrderBar from '@/components/OrderBar';
-import { OrderNavMenu } from '@/components/OrderNavMenu/OrderNavMenu';
+import OrderNavMenu from '@/components/OrderNavMenu';
 import { getLastPathPart } from '@/features/getLastPathPart';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
