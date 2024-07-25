@@ -3,6 +3,7 @@ import Header from '@/components/Layout/Header';
 import Slider from '@/components/Slider';
 import { Button } from '@/components/ui/Button';
 import { Heading } from '@/components/ui/Heading';
+import { PathNames } from '@/router/pathNames';
 export const MainPage = () => {
 	return (
 		<div className="h-full flex">
@@ -20,6 +21,7 @@ export const MainPage = () => {
 							Поминутная аренда авто твоего города
 						</Heading>
 						<Button
+							to={PathNames.ORDER_PAGE + '/' + PathNames.POSITION_PAGE}
 							className="mt-[32px] md:mt-[60px] px-14"
 							variant="green-to-darkgreen"
 						>

@@ -9,7 +9,7 @@ interface NavMenuProps {
 
 const NavMenu = ({ handlerNavMenu }: NavMenuProps) => {
 	const handleMenuClose = (event: React.MouseEvent<HTMLElement>) => {
-		const targetElement = event.target as HTMLElement;
+		const targetElement = event.currentTarget;
 		if (!targetElement.closest(`.${styles.navMenu}`)) {
 			handlerNavMenu();
 		}
@@ -39,7 +39,7 @@ const NavMenu = ({ handlerNavMenu }: NavMenuProps) => {
 						</Button>
 					))}
 				</div>
-				<Button className="hidden p-0 mt-auto max-lg:block text-main">
+				<Button className='hidden p-0 mt-auto max-lg:block text-main'>
 					Eng
 				</Button>
 			</div>
