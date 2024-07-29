@@ -1,4 +1,5 @@
 import { PathNames } from '@/router/pathNames';
+import { ICar } from '@/services/car.service';
 
 export interface IOrderField {
 	name: string;
@@ -8,6 +9,10 @@ export interface IOrderField {
 export interface IAddressField extends IOrderField {
 	city: string;
 	street: string;
+}
+
+export interface IModelField extends IOrderField {
+	type: string;
 }
 
 export interface IButtonOrder {
@@ -25,7 +30,7 @@ export interface IPosition {
 
 export interface IModel {
 	fields: {
-		model: IOrderField;
+		model: IModelField;
 	};
 	button: IButtonOrder;
 }
@@ -33,31 +38,33 @@ export interface IModel {
 export interface IOrderData {
 	[PathNames.POSITION_PAGE]?: IPosition;
 	[PathNames.MODEL_PAGE]?: IModel;
+	[PathNames.ADDITIONAL_PAGE]?: IModel;
 }
 
-export type Fields =  'address' | 'model'
+export type Fields = 'address' | 'model';
 
 export type ICombinedFields = {
-    [key in Fields]?: IOrderField | IAddressField
-}
+	[key in Fields]?: IOrderField | IAddressField | IModelField;
+};
 
 export interface IInitialState {
 	data: IOrderData;
 	currentCoordinate: [number, number];
 	combinedFields: ICombinedFields;
-    currentZoom: number;
+	currentZoom: number;
 }
 
 //actions
 export interface IActionUpdatePosition {
-    city?: string;
-    street?: string;
-    status?: boolean;
-    coordinate?: [number, number];
-    zoom?: number;
+	city?: string;
+	street?: string;
+	status?: boolean;
+	coordinate?: [number, number];
+	zoom?: number;
 }
 
 export interface IActionUpdateModel {
-    model?: string; 
-    status?: boolean
+	model?: string;
+	type?: string;
+	status?: boolean;
 }

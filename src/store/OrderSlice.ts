@@ -1,8 +1,10 @@
 import { PathNames } from '@/router/pathNames';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IActionUpdateModel, IActionUpdatePosition, IInitialState } from './types';
-
-
+import {
+	IActionUpdateModel,
+	IActionUpdatePosition,
+	IInitialState,
+} from './types';
 
 const initialState: IInitialState = {
 	data: {
@@ -26,12 +28,27 @@ const initialState: IInitialState = {
 				model: {
 					name: 'Модель',
 					value: '',
+					type: '',
 				},
 			},
 			button: {
 				status: false,
 				label: 'Дополнительно',
 				link: `${PathNames.ORDER_PAGE}/${PathNames.ADDITIONAL_PAGE}`,
+			},
+		},
+		[PathNames.ADDITIONAL_PAGE]: {
+			fields: {
+				model: {
+					name: 'Модель',
+					value: '',
+					type: '',
+				},
+			},
+			button: {
+				status: false,
+				label: 'Итого',
+				link: `${PathNames.ORDER_PAGE}/${PathNames.SUMMARY_PAGE}`,
 			},
 		},
 	},
@@ -46,10 +63,7 @@ export const orderSlice = createSlice({
 	name: 'order',
 	initialState,
 	reducers: {
-		updatePosition: (
-			state,
-			action: PayloadAction<IActionUpdatePosition>
-		) => {
+		updatePosition: (state, action: PayloadAction<IActionUpdatePosition>) => {
 			const { city, street, status, coordinate, zoom } = action.payload;
 			const address = state.data[PathNames.POSITION_PAGE].fields.address;
 
@@ -74,13 +88,11 @@ export const orderSlice = createSlice({
 				...state.data[PathNames.POSITION_PAGE].fields,
 			};
 		},
-		updateModel: (
-			state,
-			action: PayloadAction<IActionUpdateModel>
-		) => {
-			const { model, status } = action.payload;
+		updateModel: (state, action: PayloadAction<IActionUpdateModel>) => {
+			const { model, type, status } = action.payload;
 
 			state.data[PathNames.MODEL_PAGE].fields.model.value = model;
+			state.data[PathNames.MODEL_PAGE].fields.model.type = type;
 			state.data[PathNames.MODEL_PAGE].button.status = status;
 
 			state.combinedFields = {

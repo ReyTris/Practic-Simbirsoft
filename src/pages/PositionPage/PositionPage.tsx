@@ -17,8 +17,11 @@ import { RootState } from '@/store/store';
 
 export const PositionPage = () => {
 	const dispatch = useAppDispatch();
-	const { data, currentCoordinate, currentZoom} = useAppSelector((state: RootState) => state.order);
-	const {city: cityData, street: streetData} = data[PathNames.POSITION_PAGE].fields.address;
+	const { data, currentCoordinate, currentZoom } = useAppSelector(
+		(state: RootState) => state.order
+	);
+	const { city: cityData, street: streetData } =
+		data[PathNames.POSITION_PAGE].fields.address;
 
 	const [city, setCity] = useState(cityData || '');
 	const [street, setStreet] = useState(streetData || '');
@@ -29,13 +32,13 @@ export const PositionPage = () => {
 	const [zoom, setZoom] = useState(currentZoom || 5);
 
 	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>([]);
-	
+
 	const coordinateList = Object.values(streetList).flat();
 
 	const onSelectCity = (data: string) => {
 		setCity(data);
 		setStreet('');
-		setZoom(11)
+		setZoom(11);
 		setCoordinate(streetList[data][0].coordinate);
 
 		setOptionsStreet(streetList[data]);
@@ -61,8 +64,6 @@ export const PositionPage = () => {
 		}
 	};
 
-	
-
 	const onClearStreet = (event: React.MouseEvent<HTMLElement>) => {
 		event.stopPropagation();
 
@@ -85,9 +86,10 @@ export const PositionPage = () => {
 
 	useEffect(() => {
 		if (city && street) {
-			dispatch(updatePosition({ city, street, coordinate, zoom, status: true }));
+			dispatch(
+				updatePosition({ city, street, coordinate, zoom, status: true })
+			);
 		}
-		
 	}, [city, street, dispatch]);
 	return (
 		<div>
@@ -150,9 +152,8 @@ export const PositionPage = () => {
 					<Map
 						defaultState={{ center: coordinate, zoom: zoom }}
 						state={{ center: coordinate, zoom: zoom }}
-						className='w-[736px] h-[352px] max-lg:w-[100%]'
+						className="w-[736px] h-[352px] max-lg:w-[100%]"
 					>
-
 						{coordinateList.map((coordinateItem) => (
 							<Placemark
 								key={coordinateItem.street}
@@ -166,8 +167,12 @@ export const PositionPage = () => {
 									setCoordinate(coordinateItem.coordinate);
 									setZoom(15);
 
-									for(const [key, value] of Object.entries(streetList)) {
-										if(value.find((street) => street.street === coordinateItem.street)) {
+									for (const [key, value] of Object.entries(streetList)) {
+										if (
+											value.find(
+												(street) => street.street === coordinateItem.street
+											)
+										) {
 											setCity(key);
 											setStreet(coordinateItem.street);
 											setOptionsStreet(value);
@@ -177,7 +182,6 @@ export const PositionPage = () => {
 								}}
 							/>
 						))}
-						
 					</Map>
 				</YMaps>
 			</div>
