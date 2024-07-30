@@ -32,13 +32,19 @@ export const ModelPage = () => {
 		setRadioValue(e.target.value);
 	};
 
-	const handlerSelectCar = (id: number, name: string, type: string) => {
+	const handlerSelectCar = (
+		id: number,
+		name: string,
+		type: string,
+		price: string
+	) => {
 		setSelectedCardId(id);
 		dispatch(
 			updateModel({
 				model: name,
 				type: type,
 				id: id,
+				price: price,
 				status: true,
 			})
 		);

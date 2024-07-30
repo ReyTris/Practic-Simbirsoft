@@ -17,31 +17,39 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 	if (lastPartPath == PathNames.ORDER_PAGE)
 		lastPartPath = PathNames.POSITION_PAGE;
 
-	const orderData = useAppSelector(
-		(state: RootState) => state.order.data
-	);
+	const orderData = useAppSelector((state: RootState) => state.order.data);
+
+	const priceCar = orderData.model.fields.model.price;
 
 	const getOrderFields = useAppSelector(
 		(state: RootState) => state.order.combinedFields
-	)
+	);
 
 	return (
 		<ul className={className}>
 			{Object.keys(getOrderFields).map((fieldKey: Fields) => {
-					const field = getOrderFields[fieldKey]
-					if (!field.value) return null
-					return (
+				const field = getOrderFields[fieldKey];
+				if (!field.value) return null;
+				return (
 					<li key={fieldKey}>
 						<div key={fieldKey} className="flex justify-between items-end">
-							<span className="inline-block"> {field.name + ': '}</span>
+							<span className="inline-block text-[14px]">
+								{' '}
+								{field.name + ': '}
+							</span>
 							<div className="border-b-[1px] border-dotted border-gray flex-1 mx-2 mb-[6px]"></div>
-							<span className="inline-block max-w-[112px] text-gray text-right">
+							<span className="inline-block max-w-[112px] text-[14px] text-gray text-right">
 								{field.value}
 							</span>
 						</div>
 					</li>
 				);
 			})}
+			{priceCar && (
+				<div className="mt-8 text-[16px]">
+					<span className="font-semibold">Цена</span>: от {priceCar}
+				</div>
+			)}
 			<Button
 				to={orderData[lastPartPath as keyof IOrderData].button.link}
 				variant="green-to-darkgreen"

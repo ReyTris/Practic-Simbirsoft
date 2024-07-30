@@ -14,6 +14,7 @@ export interface IAddressField extends IOrderField {
 export interface IModelField extends IOrderField {
 	type: string;
 	id: number | null;
+	price: string;
 }
 
 export interface IButtonOrder {
@@ -69,4 +70,5 @@ export interface IActionUpdateModel {
 	type?: string;
 	status?: boolean;
 	id?: number | null;
+	price?: string;
 }
