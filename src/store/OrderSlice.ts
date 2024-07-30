@@ -29,6 +29,7 @@ const initialState: IInitialState = {
 					name: 'Модель',
 					value: '',
 					type: '',
+					id: null,
 				},
 			},
 			button: {
@@ -43,6 +44,7 @@ const initialState: IInitialState = {
 					name: 'Модель',
 					value: '',
 					type: '',
+					id: null,
 				},
 			},
 			button: {
@@ -89,10 +91,11 @@ export const orderSlice = createSlice({
 			};
 		},
 		updateModel: (state, action: PayloadAction<IActionUpdateModel>) => {
-			const { model, type, status } = action.payload;
+			const { model, type, status, id } = action.payload;
 
 			state.data[PathNames.MODEL_PAGE].fields.model.value = model;
 			state.data[PathNames.MODEL_PAGE].fields.model.type = type;
+			state.data[PathNames.MODEL_PAGE].fields.model.id = id;
 			state.data[PathNames.MODEL_PAGE].button.status = status;
 
 			state.combinedFields = {
@@ -100,11 +103,17 @@ export const orderSlice = createSlice({
 				...state.data[PathNames.MODEL_PAGE].fields,
 			};
 		},
-		clearDataAfterModel: (state) => {},
+		clearModel: (state) => {
+			state.data.model.fields.model = {
+				name: 'Модель',
+				value: '',
+				type: '',
+				id: null,
+			};
+		},
 	},
 });
 
-export const { updatePosition, updateModel, clearDataAfterModel } =
-	orderSlice.actions;
+export const { updatePosition, updateModel, clearModel } = orderSlice.actions;
 
 export default orderSlice.reducer;

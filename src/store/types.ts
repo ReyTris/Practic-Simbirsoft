@@ -13,6 +13,7 @@ export interface IAddressField extends IOrderField {
 
 export interface IModelField extends IOrderField {
 	type: string;
+	id: number | null;
 }
 
 export interface IButtonOrder {
@@ -67,4 +68,5 @@ export interface IActionUpdateModel {
 	model?: string;
 	type?: string;
 	status?: boolean;
+	id?: number | null;
 }

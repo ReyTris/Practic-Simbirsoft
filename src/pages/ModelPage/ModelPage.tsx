@@ -1,4 +1,3 @@
-import { Heading } from '@/components/ui/Heading';
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { useFetchCars } from '@/hooks/useFetchCars';
 import { ICar } from '@/services/car.service';
@@ -6,18 +5,21 @@ import { updateModel } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
 import { Radio, RadioChangeEvent } from 'antd';
 import { useEffect, useState } from 'react';
+import { CarCard } from './components/CarCard';
+import { CarCategoryFilter } from './components/CarCategoryFilter';
+import { radioData } from '@/constants/radioData';
 
 export const ModelPage = () => {
-	const { type, name } = useAppSelector(
+	const { type, id } = useAppSelector(
 		(state: RootState) => state.order.data.model.fields.model
 	);
 
-	console.log(type || 'Все');
-
-	const [radioValue, setRadioValue] = useState<string>(type || 'Все');
+	const [radioValue, setRadioValue] = useState<string>(
+		type || radioData[0].value
+	);
 	const [filterCars, setFilterCars] = useState<ICar[]>([]);
-	const [nameCar, setNameCar] = useState<string>(name || '');
 	const [loadingCars, setLoadingCars] = useState(false);
+	const [selectedCardId, setSelectedCardId] = useState<number | null>(id);
 
 	const dispatch = useAppDispatch();
 
@@ -26,28 +28,21 @@ export const ModelPage = () => {
 		return cars.data.filter((item) => item.categoryId.name === type);
 	};
 
-	console.log(filterCars, loading);
-
 	const onRadioChange = (e: RadioChangeEvent) => {
 		setRadioValue(e.target.value);
 	};
 
-	const handlerSelectCar = (item: ICar) => {
+	const handlerSelectCar = (id: number, name: string, type: string) => {
+		setSelectedCardId(id);
 		dispatch(
 			updateModel({
-				model: item.name,
-				type: item.categoryId.name,
+				model: name,
+				type: type,
+				id: id,
 				status: true,
 			})
 		);
 	};
-
-	// useEffect(() => {
-	// 	if (type && name) {
-	// 		setRadioValue(type);
-	// 		setNameCar(name);
-	// 	}
-	// }, []);
 
 	useEffect(() => {
 		if (radioValue === 'Все') {
@@ -58,45 +53,30 @@ export const ModelPage = () => {
 		}
 	}, [cars, radioValue]);
 
-	// useEffect(() => {
-	// 	dispatch(updateModel({}));
-	// }, [nameCar]);
 	return (
 		<div className="">
-			<Radio.Group
-				className="radio-custom"
-				onChange={onRadioChange}
-				value={radioValue}
-			>
-				<Radio value={'Все'}>Все модели</Radio>
-				<Radio value={'Эконом'}>Эконом</Radio>
-				<Radio value={'Бизнес'}>Премиум</Radio>
-			</Radio.Group>
+			<CarCategoryFilter
+				onRadioChange={onRadioChange}
+				radioValue={radioValue}
+			/>
 
 			<div className="flex flex-wrap mt-12">
 				{loadingCars
 					? 'Загрузка...'
 					: filterCars.map((item) => {
+							const { id, name, priceMax, priceMin, thumbnail, categoryId } =
+								item;
 							return (
-								<div
-									key={item.id}
-									className="relative w-1/2 max-md:w-full h-[224px] p-4 border border-[#EEEEEE] hover:border-gray cursor-pointer overflow-hidden"
-									onClick={() => handlerSelectCar(item)}
-								>
-									<div className="">
-										<Heading level="h4" className="uppercase text-[18px]">
-											{item.name}
-										</Heading>
-										<span className="text-[14px] text-gray">
-											{item.priceMin} - {item.priceMax}
-										</span>
-										<img
-											src={item.thumbnail.path}
-											alt={item.name}
-											className="absolute w-[256px] bottom-0-0 right-0 -z-10"
-										/>
-									</div>
-								</div>
+								<CarCard
+									id={id}
+									selectedCardId={selectedCardId}
+									name={name}
+									onClick={handlerSelectCar}
+									priceMax={priceMax}
+									priceMin={priceMin}
+									imagePath={thumbnail.path}
+									type={categoryId.name}
+								/>
 							);
 					  })}
 			</div>

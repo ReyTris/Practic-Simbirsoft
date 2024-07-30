@@ -1,6 +1,6 @@
 import ClearInput from '@/assets/icons/clearInput.svg';
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
-import { updatePosition } from '@/store/OrderSlice';
+import { clearModel, updatePosition } from '@/store/OrderSlice';
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { AutoComplete, Input } from 'antd';
 import { useEffect, useState } from 'react';
@@ -79,6 +79,10 @@ export const PositionPage = () => {
 		setZoom(5);
 		dispatch(updatePosition({ city: '', street: '' }));
 	};
+
+	useEffect(() => {
+		dispatch(clearModel());
+	}, []);
 
 	useEffect(() => {
 		dispatch(updatePosition({}));
