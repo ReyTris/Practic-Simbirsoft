@@ -68,6 +68,7 @@ export const ModelPage = () => {
 								item;
 							return (
 								<CarCard
+									key={id}
 									id={id}
 									selectedCardId={selectedCardId}
 									name={name}
