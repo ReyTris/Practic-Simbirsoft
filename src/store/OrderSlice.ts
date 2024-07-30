@@ -110,6 +110,8 @@ export const orderSlice = createSlice({
 				type: '',
 				id: null,
 			};
+
+			state.data.model.button.status = false;
 		},
 	},
 });
