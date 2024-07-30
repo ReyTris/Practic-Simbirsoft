@@ -87,18 +87,18 @@ export const orderSlice = createSlice({
 			state.currentZoom = zoom;
 
 			state.data[PathNames.POSITION_PAGE].button.status = status;
-
-			state.combinedFields = {
-				...state.data[PathNames.POSITION_PAGE].fields,
-			};
 		},
 		updateModel: (state, action: PayloadAction<IActionUpdateModel>) => {
 			const { model, type, status, id, price } = action.payload;
 
-			state.data[PathNames.MODEL_PAGE].fields.model.value = model;
-			state.data[PathNames.MODEL_PAGE].fields.model.type = type;
-			state.data[PathNames.MODEL_PAGE].fields.model.id = id;
-			state.data[PathNames.MODEL_PAGE].fields.model.price = price;
+			state.data[PathNames.MODEL_PAGE].fields.model = {
+				...state.data[PathNames.MODEL_PAGE].fields.model,
+				value: model,
+				id,
+				price,
+				type,
+			};
+
 			state.data[PathNames.MODEL_PAGE].button.status = status;
 
 			state.combinedFields = {
@@ -107,6 +107,9 @@ export const orderSlice = createSlice({
 			};
 		},
 		clearModel: (state) => {
+			state.combinedFields = {
+				...state.data[PathNames.POSITION_PAGE].fields,
+			};
 			state.data.model.fields.model = {
 				name: 'Модель',
 				value: '',

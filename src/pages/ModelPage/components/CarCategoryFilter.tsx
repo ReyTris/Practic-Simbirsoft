@@ -17,10 +17,10 @@ export const CarCategoryFilter = ({
 				onChange={onRadioChange}
 				value={radioValue}
 			>
-				{radioData.map((radio) => {
+				{radioData.map(({ value, preview }) => {
 					return (
-						<Radio key={radio.value} value={radio.value}>
-							{radio.preview}
+						<Radio key={value} value={value}>
+							{preview}
 						</Radio>
 					);
 				})}

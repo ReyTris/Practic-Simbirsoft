@@ -32,9 +32,9 @@ export interface ICar {
 export interface ICarApiResponse {
 	data: ICar[];
 }
-
 export const CarService = {
-	async getAllCars(): Promise<AxiosResponse<ICarApiResponse>> {
-		return await $api.get('/db/car/');
+	async getAllCars(): Promise<ICarApiResponse> {
+		const response: AxiosResponse<ICarApiResponse> = await $api.get('/db/car/');
+		return response.data;
 	},
 };

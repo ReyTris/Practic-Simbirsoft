@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { clearModel, updatePosition } from '@/store/OrderSlice';
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { AutoComplete, Input } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import mark from '@/assets/icons/mark.png';
 
@@ -31,9 +31,14 @@ export const PositionPage = () => {
 
 	const [zoom, setZoom] = useState(currentZoom || 5);
 
-	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>([]);
+	const [optionsStreet, setOptionsStreet] = useState<IStreetEntry[]>(
+		streetList[cityData] || []
+	);
 
 	const coordinateList = Object.values(streetList).flat();
+
+	const prevCityRef = useRef(city);
+	const prevStreetRef = useRef(street);
 
 	const onSelectCity = (data: string) => {
 		setCity(data);
@@ -68,7 +73,7 @@ export const PositionPage = () => {
 		event.stopPropagation();
 
 		setStreet('');
-		dispatch(updatePosition({ street: '' }));
+		dispatch(updatePosition({ city: '', street: '' }));
 	};
 
 	const onClearCity = (event: React.MouseEvent<HTMLElement>) => {
@@ -81,8 +86,10 @@ export const PositionPage = () => {
 	};
 
 	useEffect(() => {
-		dispatch(clearModel());
-	}, []);
+		if (prevCityRef.current !== city || prevStreetRef.current !== street) {
+			dispatch(clearModel());
+		}
+	}, [city, street, dispatch]);
 
 	useEffect(() => {
 		dispatch(updatePosition({}));
