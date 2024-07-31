@@ -26,6 +26,15 @@ h1 {
 	line-height: 82px;
 }
 
+.radio-custom .ant-radio-checked .ant-radio-inner {
+	border-color: var(--main-color);
+	background-color: var(--main-color);
+}
+
+.radio-custom .ant-radio-wrapper:hover .ant-radio-inner {
+	border-color: var(--main-color);
+}
+
 @layer components {
 	.button {
 		min-height: 48px;
