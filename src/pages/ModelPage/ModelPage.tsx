@@ -26,7 +26,7 @@ export const ModelPage = () => {
 		setRadioValue(e.target.value);
 	};
 
-	const handlerSelectCar = (id: number, name: string, price: string) => {
+	const handlerSelectCar = (id: number, name: string, price: string, colors: string[]) => {
 		setSelectedCardId(id);
 		dispatch(
 			updateModel({
@@ -35,6 +35,7 @@ export const ModelPage = () => {
 				price,
 				type: radioValue,
 				status: true,
+				colors
 			})
 		);
 	};
@@ -50,7 +51,7 @@ export const ModelPage = () => {
 				{loading
 					? 'Загрузка...'
 					: cars.map(
-							({ id, name, priceMax, priceMin, thumbnail, categoryId }) => {
+							({ id, name, priceMax, priceMin, thumbnail, colors }) => {
 								return (
 									<CarCard
 										key={id}
@@ -61,6 +62,7 @@ export const ModelPage = () => {
 										priceMax={priceMax}
 										priceMin={priceMin}
 										imagePath={thumbnail.path}
+										colors={colors}
 									/>
 								);
 							}

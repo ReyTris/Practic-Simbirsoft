@@ -31,6 +31,7 @@ const initialState: IInitialState = {
 					type: '',
 					id: null,
 					price: '',
+					colors: []
 				},
 			},
 			button: {
@@ -47,6 +48,7 @@ const initialState: IInitialState = {
 					type: '',
 					id: null,
 					price: '',
+					colors: []
 				},
 			},
 			button: {
@@ -89,7 +91,7 @@ export const orderSlice = createSlice({
 			state.data[PathNames.POSITION_PAGE].button.status = status;
 		},
 		updateModel: (state, action: PayloadAction<IActionUpdateModel>) => {
-			const { model, type, status, id, price } = action.payload;
+			const { model, type, status, id, price, colors } = action.payload;
 
 			state.data[PathNames.MODEL_PAGE].fields.model = {
 				...state.data[PathNames.MODEL_PAGE].fields.model,
@@ -97,6 +99,7 @@ export const orderSlice = createSlice({
 				id,
 				price,
 				type,
+				colors
 			};
 
 			state.data[PathNames.MODEL_PAGE].button.status = status;
@@ -116,6 +119,7 @@ export const orderSlice = createSlice({
 				type: '',
 				price: '',
 				id: null,
+				colors: []
 			};
 
 			state.data.model.button.status = false;
