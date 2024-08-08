@@ -20,6 +20,9 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 	const orderData = useAppSelector((state: RootState) => state.order.data);
 
 	const priceCar = orderData.model.fields.model.price;
+	const finalPrice = useAppSelector(
+		(state: RootState) => state.order.finalPrice
+	);
 
 	const getOrderFields = useAppSelector(
 		(state: RootState) => state.order.combinedFields
@@ -45,7 +48,11 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 					</li>
 				);
 			})}
-			{priceCar && (
+			{finalPrice !== 0 ? (
+				<div className="mt-8 text-[16px]">
+					<span className="font-semibold">Цена</span>: {finalPrice} Р
+				</div>
+			) : (
 				<div className="mt-8 text-[16px]">
 					<span className="font-semibold">Цена</span>: от {priceCar}
 				</div>

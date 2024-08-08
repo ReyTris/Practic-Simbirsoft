@@ -1,6 +1,8 @@
 import { PathNames } from '@/router/pathNames';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
+	AdditionalPayload,
+	IActionUpdateAdditional,
 	IActionUpdateModel,
 	IActionUpdatePosition,
 	IInitialState,
@@ -31,7 +33,7 @@ const initialState: IInitialState = {
 					type: '',
 					id: null,
 					price: '',
-					colors: []
+					colors: [],
 				},
 			},
 			button: {
@@ -42,13 +44,29 @@ const initialState: IInitialState = {
 		},
 		[PathNames.ADDITIONAL_PAGE]: {
 			fields: {
-				model: {
-					name: 'Модель',
+				color: {
+					name: 'Цвет',
 					value: '',
-					type: '',
-					id: null,
-					price: '',
-					colors: []
+				},
+				timeLength: {
+					name: 'Длительность аренды',
+					value: '',
+				},
+				tariff: {
+					name: 'Тариф',
+					value: '',
+				},
+				tank: {
+					name: 'Полный бак',
+					value: '',
+				},
+				chair: {
+					name: 'Детское кресло',
+					value: '',
+				},
+				wheel: {
+					name: 'Правый руль',
+					value: '',
 				},
 			},
 			button: {
@@ -61,6 +79,8 @@ const initialState: IInitialState = {
 
 	currentCoordinate: null,
 	currentZoom: null,
+
+	finalPrice: 0,
 
 	combinedFields: {},
 };
@@ -99,7 +119,7 @@ export const orderSlice = createSlice({
 				id,
 				price,
 				type,
-				colors
+				colors,
 			};
 
 			state.data[PathNames.MODEL_PAGE].button.status = status;
@@ -119,14 +139,49 @@ export const orderSlice = createSlice({
 				type: '',
 				price: '',
 				id: null,
-				colors: []
+				colors: [],
 			};
 
 			state.data.model.button.status = false;
 		},
+
+		updateFinalPrice: (state, action: PayloadAction<number>) => {
+			state.finalPrice += action.payload;
+		},
+
+		updateAdditional: (
+			state,
+			action: PayloadAction<IActionUpdateAdditional>
+		) => {
+			const { options, status } = action.payload;
+			for (let key in options) {
+				const fieldKey = key as AdditionalPayload;
+				state.data[PathNames.ADDITIONAL_PAGE].fields = {
+					...state.data[PathNames.ADDITIONAL_PAGE].fields,
+					[fieldKey]: {
+						...state.data[PathNames.ADDITIONAL_PAGE].fields[fieldKey],
+						value: options[fieldKey],
+					},
+				};
+			}
+
+			state.data[PathNames.ADDITIONAL_PAGE].button.status = status;
+
+			state.combinedFields = {
+				...state.data[PathNames.POSITION_PAGE].fields,
+				...state.data[PathNames.MODEL_PAGE].fields,
+				...state.data[PathNames.ADDITIONAL_PAGE].fields,
+			};
+		},
 	},
 });
 
-export const { updatePosition, updateModel, clearModel } = orderSlice.actions;
+export const {
+	updatePosition,
+	updateModel,
+	clearModel,
+	updateAdditional,
+	updateFinalPrice,
+} = orderSlice.actions;
 
 export default orderSlice.reducer;
