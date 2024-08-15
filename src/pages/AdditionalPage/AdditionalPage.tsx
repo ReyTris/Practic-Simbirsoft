@@ -24,16 +24,20 @@ export const AdditionalPage = () => {
 		(state: RootState) => state.order.data.model.fields.model
 	);
 
+	const {startDate: startDateStore, endDate: endDateStore, fields} = useAppSelector((state: RootState) => state.order.data.additional);
+
+	const {color} = useAppSelector((state: RootState) => state.order.data.additional.fields);
+
 	const dispatch = useAppDispatch();
 
 	const { rate, loading } = useRateCar(id);
 
-	const [selectedColor, setSelectedColor] = useState('');
-	const [startDate, setStartDate] = useState(null);
-	const [endDate, setEndDate] = useState(null);
-	const [tariff, setTariff] = useState(null);
+	const [selectedColor, setSelectedColor] = useState(color.value || '');
+	const [startDate, setStartDate] = useState<any>(startDateStore.value || null);
+	const [endDate, setEndDate] = useState<any>(endDateStore.value || null);
+	const [tariff, setTariff] = useState(fields.tariff.value || null);
 	const [priceDays, setPriceDays] = useState<number>(0);
-	const [options, setOptions] = useState([]);
+	const [options, setOptions] = useState({values: [], fields: []});
 
 	const onChange = (e: RadioChangeEvent) => {
 		setSelectedColor(e.target.value);
@@ -45,39 +49,40 @@ export const AdditionalPage = () => {
 	const onChangeAdditional: GetProp<typeof Checkbox.Group, 'onChange'> = (
 		checkedValues
 	) => {
-		const addedValues = checkedValues.filter(
-			(value) => !options.includes(value)
-		);
-		const removedValues = options.filter(
-			(value) => !checkedValues.includes(value)
-		);
-
-		// Считаем итоговую стоимость
-		const addedTotal = addedValues.reduce(
-			(sum: number, value: number) => sum + value,
+		const totalAdditionalCost = checkedValues.reduce(
+			(sum: number, value: number) => {
+				if (typeof value ===  'number') {
+					return sum + value;
+				} else {
+					return sum
+				}
+			},
 			0
-		);
-		const removedTotal: number = removedValues.reduce(
-			(sum, value) => sum + value,
-			0
-		);
-		const newTotal = Number(priceDays) + Number(addedTotal) - removedTotal;
-		// const selectedOptions = checkedValues.map((value) => {
-		// 	return plainOptions.find((option) => option.value === value).field;
-		// });
-		// setOptions(selectedOptions);
-		// Обновляем состояние опций и финальной цены
-		setOptions(checkedValues);
+		  );
+	
+		// Обновляем список опций
+		const selectedOptions = checkedValues.map((value) => {
+			return plainOptions.find((option) => option.value === value).field;
+		});
+	
+		setOptions({ values: checkedValues, fields: selectedOptions });
+		
+		// Обновляем состояние финальной цены
+		const newTotal = Number(priceDays) + Number(totalAdditionalCost);
 		dispatch(updateFinalPrice(newTotal));
 	};
 
 	const handleStartDateChange = (date: any) => {
 		setStartDate(date);
 		setEndDate(null);
+
+		dispatch(updateAdditional({ startDate: date }));
 	};
 
 	const handleEndDateChange = (date: any) => {
 		setEndDate(date);
+		
+		dispatch(updateAdditional({ endDate: date }));
 	};
 
 	const disabledDate: RangePickerProps['disabledDate'] = (current) => {
@@ -92,7 +97,7 @@ export const AdditionalPage = () => {
 
 	const calculatePriceOfDays = (value: string, timeType: string) => {
 		setPriceDays(
-			(prev) => prev + Number(value) * Number(calculateDaysDiff(timeType))
+			 Number(value) * Number(calculateDaysDiff(timeType))
 		);
 	};
 
@@ -112,19 +117,26 @@ export const AdditionalPage = () => {
 		}
 	}, [endDate]);
 
+	// Обновляем состояние финальной цены
 	useEffect(() => {
 		dispatch(updateFinalPrice(priceDays));
 	}, [priceDays]);
 
+	useEffect( () => {
+		dispatch(updateAdditional({ options: { tariff: tariff } }));
+	}, [tariff])
+
+	//Проверка всех полей для включения кнопки
 	useEffect(() => {
 		if (tariff !== null && selectedColor !== null && endDate !== null) {
 			dispatch(updateAdditional({ status: true }));
 		}
 	}, [tariff, selectedColor, endDate]);
 
+	//Проверка всех полей для включения кнопки, если опции не выбраны
 	useEffect(() => {
 		dispatch(updateAdditional({ options: { chair: '', wheel: '', tank: '' } }));
-		options.forEach((option) => {
+		options.fields.forEach((option) => {
 			dispatch(updateAdditional({ options: { [option]: 'Да' } }));
 		});
 		if (tariff !== null && selectedColor !== null && endDate !== null) {
@@ -186,15 +198,16 @@ export const AdditionalPage = () => {
 						className="mt-[18px] radio-custom flex flex-col"
 						onChange={onChangeTariff}
 						value={tariff}
+						disabled={endDate === null}
 					>
 						<Radio
-							value={7}
+							value='Поминутно'
 							onClick={(e) => calculatePriceOfDays('7', 'minutes')}
 						>
 							Поминутно, 7₽/мин
 						</Radio>
 						<Radio
-							value={rate}
+							value='На сутки'
 							onClick={(e) => calculatePriceOfDays(rate, 'days')}
 						>{`На сутки, ${rate} ₽/сутки`}</Radio>
 					</Radio.Group>
@@ -207,6 +220,7 @@ export const AdditionalPage = () => {
 					className="mt-[18px] flex flex-col"
 					options={plainOptions}
 					onChange={onChangeAdditional}
+					disabled={endDate === null}
 				/>
 			</div>
 		</div>

@@ -16,6 +16,8 @@ export interface IModelField extends IOrderField {
 	id: number | null;
 	price: string;
 	colors: string[];
+	number: string;
+	imagePath: string;
 }
 
 export interface IButtonOrder {
@@ -47,6 +49,9 @@ export interface IAdditional {
 		chair: IOrderField;
 		wheel: IOrderField;
 	};
+	
+	startDate: IOrderField;
+	endDate: IOrderField;
 	button: IButtonOrder;
 }
 
@@ -54,6 +59,7 @@ export interface IOrderData {
 	[PathNames.POSITION_PAGE]?: IPosition;
 	[PathNames.MODEL_PAGE]?: IModel;
 	[PathNames.ADDITIONAL_PAGE]?: IAdditional;
+	[PathNames.SUMMARY_PAGE]?: IModel;
 }
 
 export type Fields = 'address' | 'model';
@@ -86,12 +92,16 @@ export interface IActionUpdateModel {
 	id?: number | null;
 	price?: string;
 	colors?: string[];
+	imagePath?: string;
+	number?: string;
 }
 export interface IActionUpdateAdditional {
 	options?: {
 		[key in AdditionalPayload]?: string;
 	};
 	status?: boolean;
+	startDate?: string;
+	endDate?: string;
 }
 
 export type AdditionalPayload =

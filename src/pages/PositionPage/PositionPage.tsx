@@ -1,6 +1,6 @@
 import ClearInput from '@/assets/icons/clearInput.svg';
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
-import { clearModel, updatePosition } from '@/store/OrderSlice';
+import { clearAdditional, clearModel, updatePosition } from '@/store/OrderSlice';
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { AutoComplete, Input } from 'antd';
 import { useEffect, useRef, useState } from 'react';
@@ -88,6 +88,7 @@ export const PositionPage = () => {
 	useEffect(() => {
 		if (prevCityRef.current !== city || prevStreetRef.current !== street) {
 			dispatch(clearModel());
+			// dispatch(clearAdditional());
 		}
 	}, [city, street, dispatch]);
 

@@ -6,6 +6,7 @@ import PositionPage from '@/pages/PositionPage';
 import { Navigate, createHashRouter } from 'react-router-dom';
 import { PathNames } from './pathNames';
 import AdditionalPage from '@/pages/AdditionalPage';
+import SummaryPage from '@/pages/SummaryPage';
 
 const routes = createHashRouter([
 	{
@@ -24,7 +25,7 @@ const routes = createHashRouter([
 					{ path: PathNames.POSITION_PAGE, element: <PositionPage /> },
 					{ path: PathNames.MODEL_PAGE, element: <ModelPage /> },
 					{ path: PathNames.ADDITIONAL_PAGE, element: <AdditionalPage /> },
-					{ path: PathNames.SUMMARY_PAGE, element: <PositionPage /> },
+					{ path: PathNames.SUMMARY_PAGE, element: <SummaryPage /> },
 				],
 			},
 		],
