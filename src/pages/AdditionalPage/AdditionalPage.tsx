@@ -5,13 +5,14 @@ import { RootState } from '@/store/store';
 import {
 	Checkbox,
 	DatePicker,
-	GetProp,
 	Radio,
 	RadioChangeEvent,
 	Space,
 } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
 import { useEffect, useState } from 'react';
+
+import ClearInput from '@/assets/icons/clearInput.svg';
 
 const plainOptions = [
 	{ label: 'Полный бак, 500р', value: 500, field: 'tank' },
@@ -24,89 +25,100 @@ export const AdditionalPage = () => {
 		(state: RootState) => state.order.data.model.fields.model
 	);
 
-	const {startDate: startDateStore, endDate: endDateStore, fields} = useAppSelector((state: RootState) => state.order.data.additional);
+	const { startDate: startDateStore, endDate: endDateStore, fields } = useAppSelector(
+		(state: RootState) => state.order.data.additional
+	);
 
-	const {color} = useAppSelector((state: RootState) => state.order.data.additional.fields);
+	const { color, tank, chair, wheel } = fields;
+
+	const { priceDays: priceDaysStore, priceOptions: priceOptionsStore } = useAppSelector(
+		(state: RootState) => state.order
+	);
 
 	const dispatch = useAppDispatch();
-
 	const { rate, loading } = useRateCar(id);
 
-	const [selectedColor, setSelectedColor] = useState(color.value || '');
-	const [startDate, setStartDate] = useState<any>(startDateStore.value || null);
-	const [endDate, setEndDate] = useState<any>(endDateStore.value || null);
-	const [tariff, setTariff] = useState(fields.tariff.value || null);
-	const [priceDays, setPriceDays] = useState<number>(0);
-	const [options, setOptions] = useState({values: [], fields: []});
+	const [state, setState] = useState({
+		selectedColor: color.value || '',
+		startDate: startDateStore.value || null,
+		endDate: endDateStore.value || null,
+		tariff: fields.tariff.value || null,
+		priceDays: priceDaysStore || 0,
+		priceOptions: priceOptionsStore || 0,
+		options: {
+			values: [tank, chair, wheel].filter(item => item.value.length > 0)
+				.map(item => plainOptions.find(option => option.field === item.type)?.value) || [],
+			fields: [tank, chair, wheel].filter(item => item.value.length > 0).map(item => item.type)
+		},
+	});
 
-	const onChange = (e: RadioChangeEvent) => {
-		setSelectedColor(e.target.value);
+	const onChangeColor = (e: RadioChangeEvent) => {
+		setState(prev => ({ ...prev, selectedColor: e.target.value }));
 	};
+
 	const onChangeTariff = (e: RadioChangeEvent) => {
-		setTariff(e.target.value);
+		setState(prev => ({ ...prev, tariff: e.target.value }));
 	};
 
-	const onChangeAdditional: GetProp<typeof Checkbox.Group, 'onChange'> = (
-		checkedValues
-	) => {
-		const totalAdditionalCost = checkedValues.reduce(
-			(sum: number, value: number) => {
-				if (typeof value ===  'number') {
-					return sum + value;
-				} else {
-					return sum
-				}
-			},
-			0
-		  );
-	
-		// Обновляем список опций
+	const onChangeAdditional: Checkbox.GroupProps['onChange'] = (checkedValues) => {
+		const totalAdditionalCost = checkedValues.reduce((sum: number, value: number) => {
+			return typeof value === 'number' ? sum + value : sum;
+		}, 0);
+
 		const selectedOptions = checkedValues.map((value) => {
-			return plainOptions.find((option) => option.value === value).field;
+			return plainOptions.find((option) => option.value === value)?.field;
 		});
-	
-		setOptions({ values: checkedValues, fields: selectedOptions });
-		
-		// Обновляем состояние финальной цены
-		const newTotal = Number(priceDays) + Number(totalAdditionalCost);
-		dispatch(updateFinalPrice(newTotal));
+
+		setState(prev => ({
+			...prev,
+			options: { values: checkedValues, fields: selectedOptions },
+			priceOptions: totalAdditionalCost,
+		}));
 	};
 
 	const handleStartDateChange = (date: any) => {
-		setStartDate(date);
-		setEndDate(null);
-
+		setState(prev => ({
+			...prev,
+			startDate: date,
+			endDate: null,
+		}));
 		dispatch(updateAdditional({ startDate: date }));
 	};
 
 	const handleEndDateChange = (date: any) => {
-		setEndDate(date);
-		
+		setState(prev => ({
+			...prev,
+			endDate: date,
+		}));
 		dispatch(updateAdditional({ endDate: date }));
 	};
 
 	const disabledDate: RangePickerProps['disabledDate'] = (current) => {
-		return startDate ? current && current < startDate.startOf('day') : false;
+		return state.startDate ? current && current < state.startDate.startOf('day') : false;
 	};
 
 	const calculateDaysDiff = (timeType: string) => {
+		const { startDate, endDate } = state;
 		if (startDate && endDate) {
 			return endDate.diff(startDate, timeType);
 		}
+		return 0;
 	};
 
 	const calculatePriceOfDays = (value: string, timeType: string) => {
-		setPriceDays(
-			 Number(value) * Number(calculateDaysDiff(timeType))
-		);
+		const daysDiff = calculateDaysDiff(timeType);
+		setState(prev => ({
+			...prev,
+			priceDays: Number(value) * daysDiff,
+		}));
 	};
 
 	useEffect(() => {
-		dispatch(updateAdditional({ options: { color: selectedColor } }));
-	}, [selectedColor]);
+		dispatch(updateAdditional({ options: { color: state.selectedColor } }));
+	}, [state.selectedColor]);
 
 	useEffect(() => {
-		if (startDate && endDate) {
+		if (state.startDate && state.endDate) {
 			const commonMinutes = calculateDaysDiff('minutes');
 			const days = Math.ceil(commonMinutes / (60 * 24));
 			const hours = Math.ceil((commonMinutes % (60 * 24)) / 60);
@@ -115,34 +127,28 @@ export const AdditionalPage = () => {
 				updateAdditional({ options: { timeLength: `${totalDays}д ${hours}ч` } })
 			);
 		}
-	}, [endDate]);
+	}, [state.endDate]);
 
-	// Обновляем состояние финальной цены
 	useEffect(() => {
-		dispatch(updateFinalPrice(priceDays));
-	}, [priceDays]);
+		dispatch(updateFinalPrice({ priceDays: state.priceDays, priceOptions: state.priceOptions }));
+	}, [state.startDate, state.endDate, state.priceDays, state.priceOptions]);
 
-	useEffect( () => {
-		dispatch(updateAdditional({ options: { tariff: tariff } }));
-	}, [tariff])
-
-	//Проверка всех полей для включения кнопки
 	useEffect(() => {
-		if (tariff !== null && selectedColor !== null && endDate !== null) {
-			dispatch(updateAdditional({ status: true }));
-		}
-	}, [tariff, selectedColor, endDate]);
+		dispatch(updateAdditional({ options: { tariff: state.tariff } }));
+	}, [state.tariff]);
 
-	//Проверка всех полей для включения кнопки, если опции не выбраны
 	useEffect(() => {
-		dispatch(updateAdditional({ options: { chair: '', wheel: '', tank: '' } }));
-		options.fields.forEach((option) => {
-			dispatch(updateAdditional({ options: { [option]: 'Да' } }));
+		plainOptions.forEach((option) => {
+			if (state.options.fields.includes(option.field)) {
+				dispatch(updateAdditional({ options: { [option.field]: 'Да' } }));
+			} else {
+				dispatch(updateAdditional({ options: { [option.field]: '' } }));
+			}
 		});
-		if (tariff !== null && selectedColor !== null && endDate !== null) {
+		if (state.tariff && state.selectedColor && state.endDate) {
 			dispatch(updateAdditional({ status: true }));
 		}
-	}, [options, tariff, selectedColor, endDate]);
+	}, [state.options, state.tariff, state.selectedColor, state.endDate]);
 
 	return (
 		<div>
@@ -150,16 +156,14 @@ export const AdditionalPage = () => {
 				<p>Цвет</p>
 				<Radio.Group
 					className="radio-custom mt-[18px]"
-					onChange={onChange}
-					value={selectedColor}
+					onChange={onChangeColor}
+					value={state.selectedColor}
 				>
-					{carColors.map((color) => {
-						return (
-							<Radio key={color} value={color}>
-								{color}
-							</Radio>
-						);
-					})}
+					{carColors.map((color) => (
+						<Radio key={color} value={color}>
+							{color}
+						</Radio>
+					))}
 				</Radio.Group>
 			</div>
 			<div className="mt-[32px]">
@@ -167,23 +171,19 @@ export const AdditionalPage = () => {
 				<Space className="mt-[18px]" direction="vertical" size="middle">
 					<Space style={{ alignItems: 'center' }}>
 						<DatePicker
-							value={startDate}
+							value={state.startDate}
 							onChange={handleStartDateChange}
-							format={{
-								format: 'YYYY-MM-DD HH:mm',
-								type: 'mask',
-							}}
+							format="YYYY-MM-DD HH:mm"
+							// className='border-none pb-[2px] px-1 border-b border-black w-fit'
+							// suffixIcon={<ClearInput className="cursor-pointer" />}
 						/>
 					</Space>
 					<Space style={{ alignItems: 'center' }}>
 						<DatePicker
-							value={endDate}
+							value={state.endDate}
 							onChange={handleEndDateChange}
 							disabledDate={disabledDate}
-							format={{
-								format: 'YYYY-MM-DD HH:mm',
-								type: 'mask',
-							}}
+							format="YYYY-MM-DD HH:mm"
 						/>
 					</Space>
 				</Space>
@@ -197,18 +197,18 @@ export const AdditionalPage = () => {
 					<Radio.Group
 						className="mt-[18px] radio-custom flex flex-col"
 						onChange={onChangeTariff}
-						value={tariff}
-						disabled={endDate === null}
+						value={state.tariff}
+						disabled={!state.endDate}
 					>
 						<Radio
-							value='Поминутно'
-							onClick={(e) => calculatePriceOfDays('7', 'minutes')}
+							value="Поминутно"
+							onClick={() => calculatePriceOfDays('7', 'minutes')}
 						>
 							Поминутно, 7₽/мин
 						</Radio>
 						<Radio
-							value='На сутки'
-							onClick={(e) => calculatePriceOfDays(rate, 'days')}
+							value="На сутки"
+							onClick={() => calculatePriceOfDays(rate, 'days')}
 						>{`На сутки, ${rate} ₽/сутки`}</Radio>
 					</Radio.Group>
 				)}
@@ -220,7 +220,8 @@ export const AdditionalPage = () => {
 					className="mt-[18px] flex flex-col"
 					options={plainOptions}
 					onChange={onChangeAdditional}
-					disabled={endDate === null}
+					disabled={!state.endDate}
+					value={state.options.values}
 				/>
 			</div>
 		</div>

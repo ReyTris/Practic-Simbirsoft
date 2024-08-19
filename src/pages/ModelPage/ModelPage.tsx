@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { useCars } from '@/hooks/useCars';
-import { clearAdditional, updateModel } from '@/store/OrderSlice';
+import {  clearAdditional, updateModel } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
 import { RadioChangeEvent } from 'antd';
 import { useState } from 'react';
@@ -41,7 +41,7 @@ export const ModelPage = () => {
 			})
 		);
 
-		// dispatch(clearAdditional())
+		dispatch(clearAdditional())
 	};
 
 	return (

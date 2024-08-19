@@ -61,14 +61,17 @@ const initialState: IInitialState = {
 				tank: {
 					name: 'Полный бак',
 					value: '',
+					type: 'tank',
 				},
 				chair: {
 					name: 'Детское кресло',
 					value: '',
+					type: 'chair',
 				},
 				wheel: {
 					name: 'Правый руль',
 					value: '',
+					type: 'wheel',
 				},
 			},
 			
@@ -111,6 +114,8 @@ const initialState: IInitialState = {
 	currentCoordinate: null,
 	currentZoom: null,
 
+	priceDays: 0,
+	priceOptions: 0,
 	finalPrice: 0,
 
 	combinedFields: {},
@@ -180,8 +185,11 @@ export const orderSlice = createSlice({
 			state.data.model.button.status = false;
 		},
 
-		updateFinalPrice: (state, action: PayloadAction<number>) => {
-			state.finalPrice = action.payload;
+		updateFinalPrice: (state, action: PayloadAction<{priceDays: number, priceOptions: number}>) => {
+			const {priceDays, priceOptions} = action.payload
+			state.priceDays = priceDays;
+			state.priceOptions = priceOptions;
+			state.finalPrice = priceDays + priceOptions;
 		},
 
 		updateAdditional: (
@@ -201,8 +209,6 @@ export const orderSlice = createSlice({
 			}
 
 			if (startDate !== undefined) {
-				
-				
 				state.data[PathNames.ADDITIONAL_PAGE].startDate.value = startDate;
 			}
 
@@ -235,6 +241,10 @@ export const orderSlice = createSlice({
 				};
 			}
 
+			state.data.additional.startDate.value = '';
+			state.data.additional.endDate.value = '';
+			state.priceDays = 0;
+			state.priceOptions = 0;
 			state.finalPrice = 0;
 		}
 	},

@@ -20,6 +20,10 @@ export interface IModelField extends IOrderField {
 	imagePath: string;
 }
 
+export interface IAdditionalField extends IOrderField {
+	type: string;
+}
+
 export interface IButtonOrder {
 	status: boolean;
 	label: string;
@@ -45,9 +49,9 @@ export interface IAdditional {
 		color: IOrderField;
 		timeLength: IOrderField;
 		tariff: IOrderField;
-		tank: IOrderField;
-		chair: IOrderField;
-		wheel: IOrderField;
+		tank: IAdditionalField;
+		chair: IAdditionalField;
+		wheel: IAdditionalField;
 	};
 	
 	startDate: IOrderField;
@@ -73,6 +77,8 @@ export interface IInitialState {
 	currentCoordinate: [number, number];
 	combinedFields: ICombinedFields;
 	currentZoom: number;
+	priceDays: number;
+	priceOptions: number;
 	finalPrice: number;
 }
 

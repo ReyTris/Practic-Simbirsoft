@@ -88,7 +88,6 @@ export const PositionPage = () => {
 	useEffect(() => {
 		if (prevCityRef.current !== city || prevStreetRef.current !== street) {
 			dispatch(clearModel());
-			// dispatch(clearAdditional());
 		}
 	}, [city, street, dispatch]);
 
