@@ -2,15 +2,11 @@ import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { useRateCar } from '@/hooks/useRateCar';
 import { updateAdditional, updateFinalPrice } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
-import {
-	Checkbox,
-	DatePicker,
-	Radio,
-	RadioChangeEvent,
-	Space,
-} from 'antd';
+import { Checkbox, DatePicker, Radio, RadioChangeEvent, Space } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
 import { useEffect, useState } from 'react';
+
+import * as pickerstyles from './dataPicker.module.scss';
 
 import ClearInput from '@/assets/icons/clearInput.svg';
 
@@ -25,15 +21,16 @@ export const AdditionalPage = () => {
 		(state: RootState) => state.order.data.model.fields.model
 	);
 
-	const { startDate: startDateStore, endDate: endDateStore, fields } = useAppSelector(
-		(state: RootState) => state.order.data.additional
-	);
+	const {
+		startDate: startDateStore,
+		endDate: endDateStore,
+		fields,
+	} = useAppSelector((state: RootState) => state.order.data.additional);
 
 	const { color, tank, chair, wheel } = fields;
 
-	const { priceDays: priceDaysStore, priceOptions: priceOptionsStore } = useAppSelector(
-		(state: RootState) => state.order
-	);
+	const { priceDays: priceDaysStore, priceOptions: priceOptionsStore } =
+		useAppSelector((state: RootState) => state.order);
 
 	const dispatch = useAppDispatch();
 	const { rate, loading } = useRateCar(id);
@@ -46,30 +43,42 @@ export const AdditionalPage = () => {
 		priceDays: priceDaysStore || 0,
 		priceOptions: priceOptionsStore || 0,
 		options: {
-			values: [tank, chair, wheel].filter(item => item.value.length > 0)
-				.map(item => plainOptions.find(option => option.field === item.type)?.value) || [],
-			fields: [tank, chair, wheel].filter(item => item.value.length > 0).map(item => item.type)
+			values:
+				[tank, chair, wheel]
+					.filter((item) => item.value.length > 0)
+					.map(
+						(item) =>
+							plainOptions.find((option) => option.field === item.type)?.value
+					) || [],
+			fields: [tank, chair, wheel]
+				.filter((item) => item.value.length > 0)
+				.map((item) => item.type),
 		},
 	});
 
 	const onChangeColor = (e: RadioChangeEvent) => {
-		setState(prev => ({ ...prev, selectedColor: e.target.value }));
+		setState((prev) => ({ ...prev, selectedColor: e.target.value }));
 	};
 
 	const onChangeTariff = (e: RadioChangeEvent) => {
-		setState(prev => ({ ...prev, tariff: e.target.value }));
+		setState((prev) => ({ ...prev, tariff: e.target.value }));
 	};
 
-	const onChangeAdditional: Checkbox.GroupProps['onChange'] = (checkedValues) => {
-		const totalAdditionalCost = checkedValues.reduce((sum: number, value: number) => {
-			return typeof value === 'number' ? sum + value : sum;
-		}, 0);
+	const onChangeAdditional: Checkbox.GroupProps['onChange'] = (
+		checkedValues
+	) => {
+		const totalAdditionalCost = checkedValues.reduce(
+			(sum: number, value: number) => {
+				return typeof value === 'number' ? sum + value : sum;
+			},
+			0
+		);
 
 		const selectedOptions = checkedValues.map((value) => {
 			return plainOptions.find((option) => option.value === value)?.field;
 		});
 
-		setState(prev => ({
+		setState((prev) => ({
 			...prev,
 			options: { values: checkedValues, fields: selectedOptions },
 			priceOptions: totalAdditionalCost,
@@ -77,7 +86,7 @@ export const AdditionalPage = () => {
 	};
 
 	const handleStartDateChange = (date: any) => {
-		setState(prev => ({
+		setState((prev) => ({
 			...prev,
 			startDate: date,
 			endDate: null,
@@ -86,7 +95,7 @@ export const AdditionalPage = () => {
 	};
 
 	const handleEndDateChange = (date: any) => {
-		setState(prev => ({
+		setState((prev) => ({
 			...prev,
 			endDate: date,
 		}));
@@ -94,7 +103,9 @@ export const AdditionalPage = () => {
 	};
 
 	const disabledDate: RangePickerProps['disabledDate'] = (current) => {
-		return state.startDate ? current && current < state.startDate.startOf('day') : false;
+		return state.startDate
+			? current && current < state.startDate.startOf('day')
+			: false;
 	};
 
 	const calculateDaysDiff = (timeType: string) => {
@@ -107,7 +118,7 @@ export const AdditionalPage = () => {
 
 	const calculatePriceOfDays = (value: string, timeType: string) => {
 		const daysDiff = calculateDaysDiff(timeType);
-		setState(prev => ({
+		setState((prev) => ({
 			...prev,
 			priceDays: Number(value) * daysDiff,
 		}));
@@ -130,7 +141,12 @@ export const AdditionalPage = () => {
 	}, [state.endDate]);
 
 	useEffect(() => {
-		dispatch(updateFinalPrice({ priceDays: state.priceDays, priceOptions: state.priceOptions }));
+		dispatch(
+			updateFinalPrice({
+				priceDays: state.priceDays,
+				priceOptions: state.priceOptions,
+			})
+		);
 	}, [state.startDate, state.endDate, state.priceDays, state.priceOptions]);
 
 	useEffect(() => {
@@ -170,21 +186,31 @@ export const AdditionalPage = () => {
 				<p>Дата аренды</p>
 				<Space className="mt-[18px]" direction="vertical" size="middle">
 					<Space style={{ alignItems: 'center' }}>
-						<DatePicker
-							value={state.startDate}
-							onChange={handleStartDateChange}
-							format="YYYY-MM-DD HH:mm"
-							// className='border-none pb-[2px] px-1 border-b border-black w-fit'
-							// suffixIcon={<ClearInput className="cursor-pointer" />}
-						/>
+						<span className="inline-block w-3">С</span>
+						<div className="pb-[2px] px-1 border-b border-black w-fit">
+							<DatePicker
+								value={state.startDate}
+								onChange={handleStartDateChange}
+								format="YYYY-MM-DD HH:mm"
+								className="border-none outline-none"
+								suffixIcon={false}
+								allowClear={{ clearIcon: <ClearInput /> }}
+							/>
+						</div>
 					</Space>
 					<Space style={{ alignItems: 'center' }}>
-						<DatePicker
-							value={state.endDate}
-							onChange={handleEndDateChange}
-							disabledDate={disabledDate}
-							format="YYYY-MM-DD HH:mm"
-						/>
+						<span className="inline-block w-3">По</span>
+						<div className="pb-[2px] px-1 border-b border-black w-fit">
+							<DatePicker
+								value={state.endDate}
+								onChange={handleEndDateChange}
+								disabledDate={disabledDate}
+								format="YYYY-MM-DD HH:mm"
+								className="border-none outline-none"
+								suffixIcon={false}
+								allowClear={{ clearIcon: <ClearInput /> }}
+							/>
+						</div>
 					</Space>
 				</Space>
 			</div>

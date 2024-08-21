@@ -74,7 +74,7 @@ const initialState: IInitialState = {
 					type: 'wheel',
 				},
 			},
-			
+
 			startDate: {
 				name: 'Доступна с',
 				value: '',
@@ -104,7 +104,7 @@ const initialState: IInitialState = {
 				},
 			},
 			button: {
-				status: true,
+				status: false,
 				label: 'Дополнительно',
 				link: `${PathNames.ORDER_PAGE}/${PathNames.ADDITIONAL_PAGE}`,
 			},
@@ -147,7 +147,8 @@ export const orderSlice = createSlice({
 			state.data[PathNames.POSITION_PAGE].button.status = status;
 		},
 		updateModel: (state, action: PayloadAction<IActionUpdateModel>) => {
-			const { model, type, status, id, price, colors,imagePath, number } = action.payload;
+			const { model, type, status, id, price, colors, imagePath, number } =
+				action.payload;
 
 			state.data[PathNames.MODEL_PAGE].fields.model = {
 				...state.data[PathNames.MODEL_PAGE].fields.model,
@@ -157,7 +158,7 @@ export const orderSlice = createSlice({
 				type,
 				colors,
 				number,
-				imagePath
+				imagePath,
 			};
 
 			state.data[PathNames.MODEL_PAGE].button.status = status;
@@ -185,8 +186,11 @@ export const orderSlice = createSlice({
 			state.data.model.button.status = false;
 		},
 
-		updateFinalPrice: (state, action: PayloadAction<{priceDays: number, priceOptions: number}>) => {
-			const {priceDays, priceOptions} = action.payload
+		updateFinalPrice: (
+			state,
+			action: PayloadAction<{ priceDays: number; priceOptions: number }>
+		) => {
+			const { priceDays, priceOptions } = action.payload;
 			state.priceDays = priceDays;
 			state.priceOptions = priceOptions;
 			state.finalPrice = priceDays + priceOptions;
@@ -246,7 +250,9 @@ export const orderSlice = createSlice({
 			state.priceDays = 0;
 			state.priceOptions = 0;
 			state.finalPrice = 0;
-		}
+
+			state.data[PathNames.ADDITIONAL_PAGE].button.status = false;
+		},
 	},
 });
 
