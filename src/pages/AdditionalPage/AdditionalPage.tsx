@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import * as pickerstyles from './dataPicker.module.scss';
 
 import ClearInput from '@/assets/icons/clearInput.svg';
+import dayjs from 'dayjs';
 
 const plainOptions = [
 	{ label: 'Полный бак, 500р', value: 500, field: 'tank' },
@@ -54,6 +55,9 @@ export const AdditionalPage = () => {
 				.filter((item) => item.value.length > 0)
 				.map((item) => item.type),
 		},
+
+		rate: '',
+		time: '',
 	});
 
 	const onChangeColor = (e: RadioChangeEvent) => {
@@ -102,6 +106,9 @@ export const AdditionalPage = () => {
 		dispatch(updateAdditional({ endDate: date }));
 	};
 
+	const disabledStartDate: RangePickerProps['disabledDate'] = (current) => {
+		return dayjs(current).isBefore(dayjs().subtract(1, 'day'));
+	};
 	const disabledDate: RangePickerProps['disabledDate'] = (current) => {
 		return state.startDate
 			? current && current < state.startDate.startOf('day')
@@ -117,12 +124,20 @@ export const AdditionalPage = () => {
 	};
 
 	const calculatePriceOfDays = (value: string, timeType: string) => {
-		const daysDiff = calculateDaysDiff(timeType);
 		setState((prev) => ({
 			...prev,
-			priceDays: Number(value) * daysDiff,
+			rate: value,
+			time: timeType,
 		}));
 	};
+
+	useEffect(() => {
+		const daysDiff = calculateDaysDiff(state.time);
+		setState((prev) => ({
+			...prev,
+			priceDays: Number(state.rate) * daysDiff,
+		}));
+	}, [state.rate, state.time, state.startDate, state.endDate]);
 
 	useEffect(() => {
 		dispatch(updateAdditional({ options: { color: state.selectedColor } }));
@@ -195,6 +210,7 @@ export const AdditionalPage = () => {
 								className="border-none outline-none"
 								suffixIcon={false}
 								allowClear={{ clearIcon: <ClearInput /> }}
+								disabledDate={disabledStartDate}
 							/>
 						</div>
 					</Space>
@@ -243,11 +259,12 @@ export const AdditionalPage = () => {
 			<div className="mt-[32px]">
 				<p>Доп услуги</p>
 				<Checkbox.Group
-					className="mt-[18px] flex flex-col"
+					className="custom-checkbox mt-[18px] flex flex-col"
 					options={plainOptions}
 					onChange={onChangeAdditional}
 					disabled={!state.endDate}
 					value={state.options.values}
+					data-custom-checkbox
 				/>
 			</div>
 		</div>
