@@ -35,6 +35,29 @@ h1 {
 	border-color: var(--main-color);
 }
 
+.custom-checkbox .ant-checkbox-wrapper {
+	.ant-checkbox-checked .ant-checkbox-inner {
+		background-color: transparent;
+		border-color: var(--main-color);
+	}
+
+	&:hover {
+		.ant-checkbox-inner {
+			border-color: var(--main-color) !important;
+		}
+
+		.ant-checkbox-checked .ant-checkbox-inner {
+			background-color: transparent !important;
+			border-color: var(--main-color);
+		}
+	}
+}
+
+.ant-checkbox-checked .ant-checkbox-inner:after {
+	border-color: var(--main-color);
+	border-width: 2px;
+}
+
 @layer components {
 	.button {
 		min-height: 48px;

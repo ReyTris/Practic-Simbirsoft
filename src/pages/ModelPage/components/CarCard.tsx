@@ -7,8 +7,10 @@ interface CarCardProps {
 	priceMax: number;
 	priceMin: number;
 	imagePath: string;
-	onClick: (id: number, name: string, price: string) => void;
+	onClick: (id: number, name: string, price: string, colors: string[], number: string, imagePath: string) => void;
 	selectedCardId: number;
+	colors: string[];
+	number: string;
 }
 
 export const CarCard = ({
@@ -19,6 +21,8 @@ export const CarCard = ({
 	imagePath,
 	selectedCardId,
 	onClick,
+	colors,
+	number
 }: CarCardProps) => {
 	const buildPrice = `${priceMin} - ${priceMax}`;
 	return (
@@ -27,7 +31,7 @@ export const CarCard = ({
 				'relative w-1/2 max-md:w-full h-[224px] p-4 border border-[#EEEEEE] hover:border-gray cursor-pointer overflow-hidden',
 				{ 'border-main': selectedCardId == id }
 			)}
-			onClick={() => onClick(id, name, buildPrice)}
+			onClick={() => onClick(id, name, buildPrice, colors, number, imagePath)}
 		>
 			<div className="">
 				<Heading level="h4" className="uppercase text-[18px]">

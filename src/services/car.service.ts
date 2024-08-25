@@ -32,9 +32,30 @@ export interface ICar {
 export interface ICarApiResponse {
 	data: ICar[];
 }
+
+export interface IRateCarResponse {
+	
+	data: {
+		id: number
+		price: string
+		createdAt: string
+		updatedAt: string
+		rateTypeId: {
+			i: number
+			name: string
+			unit: string
+			createdAt: string
+			updatedAt: string
+		}
+	}
+}
 export const CarService = {
 	async getAllCars(): Promise<ICarApiResponse> {
 		const response: AxiosResponse<ICarApiResponse> = await $api.get('/db/car/');
 		return response.data;
 	},
+	async getRateCar(id: number): Promise<IRateCarResponse> {
+		const response: AxiosResponse<IRateCarResponse> = await $api.get(`/db/rate/${id}`)
+		return response.data
+	}
 };

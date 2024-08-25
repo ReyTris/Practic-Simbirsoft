@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { useCars } from '@/hooks/useCars';
-import { updateModel } from '@/store/OrderSlice';
+import {  clearAdditional, updateModel } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
 import { RadioChangeEvent } from 'antd';
 import { useState } from 'react';
@@ -26,7 +26,7 @@ export const ModelPage = () => {
 		setRadioValue(e.target.value);
 	};
 
-	const handlerSelectCar = (id: number, name: string, price: string) => {
+	const handlerSelectCar = (id: number, name: string, price: string, colors: string[], number: string, imagePath: string) => {
 		setSelectedCardId(id);
 		dispatch(
 			updateModel({
@@ -35,8 +35,13 @@ export const ModelPage = () => {
 				price,
 				type: radioValue,
 				status: true,
+				colors,
+				number,
+				imagePath
 			})
 		);
+
+		dispatch(clearAdditional())
 	};
 
 	return (
@@ -50,7 +55,7 @@ export const ModelPage = () => {
 				{loading
 					? 'Загрузка...'
 					: cars.map(
-							({ id, name, priceMax, priceMin, thumbnail, categoryId }) => {
+							({ id, name, priceMax, priceMin, thumbnail, colors, number }) => {
 								return (
 									<CarCard
 										key={id}
@@ -61,6 +66,8 @@ export const ModelPage = () => {
 										priceMax={priceMax}
 										priceMin={priceMin}
 										imagePath={thumbnail.path}
+										colors={colors}
+										number={number}
 									/>
 								);
 							}
