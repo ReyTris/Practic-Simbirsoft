@@ -18,6 +18,7 @@ import {
 } from '@/constants/initialMapPoints';
 import { PathNames } from '@/router/pathNames';
 import { RootState } from '@/store/store';
+import { CarService } from '@/services/car.service';
 
 export const PositionPage = () => {
 	const dispatch = useAppDispatch();
@@ -26,6 +27,10 @@ export const PositionPage = () => {
 	);
 	const { city: cityData, street: streetData } =
 		data[PathNames.POSITION_PAGE].fields.address;
+
+	const orderData = useAppSelector((state: RootState) => {
+		return state.order.orderData;
+	});
 
 	const [city, setCity] = useState(cityData || '');
 	const [street, setStreet] = useState(streetData || '');
@@ -71,6 +76,8 @@ export const PositionPage = () => {
 				})
 			);
 		}
+
+		// CarService.createOrder(orderData);
 	};
 
 	const onClearStreet = (event: React.MouseEvent<HTMLElement>) => {

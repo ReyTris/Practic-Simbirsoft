@@ -1,5 +1,6 @@
 import { PathNames } from '@/router/pathNames';
 import { ICar } from '@/services/car.service';
+import { IOrderData } from '@/services/types.order';
 
 export interface IOrderField {
 	name: string;
@@ -49,17 +50,17 @@ export interface IAdditional {
 		color: IOrderField;
 		timeLength: IOrderField;
 		tariff: IOrderField;
-		tank: IAdditionalField;
-		chair: IAdditionalField;
-		wheel: IAdditionalField;
+		isFullTank: IAdditionalField;
+		isNeedChildChair: IAdditionalField;
+		isRightWheel: IAdditionalField;
 	};
-	
+
 	startDate: IOrderField;
 	endDate: IOrderField;
 	button: IButtonOrder;
 }
 
-export interface IOrderData {
+export interface IOrderFields {
 	[PathNames.POSITION_PAGE]?: IPosition;
 	[PathNames.MODEL_PAGE]?: IModel;
 	[PathNames.ADDITIONAL_PAGE]?: IAdditional;
@@ -73,13 +74,14 @@ export type ICombinedFields = {
 };
 
 export interface IInitialState {
-	data: IOrderData;
+	data: IOrderFields;
 	currentCoordinate: [number, number];
 	combinedFields: ICombinedFields;
 	currentZoom: number;
 	priceDays: number;
 	priceOptions: number;
 	finalPrice: number;
+	orderData: IOrderData;
 }
 
 //actions
@@ -100,6 +102,7 @@ export interface IActionUpdateModel {
 	colors?: string[];
 	imagePath?: string;
 	number?: string;
+	car?: ICar;
 }
 export interface IActionUpdateAdditional {
 	options?: {
@@ -114,7 +117,7 @@ export type AdditionalPayload =
 	| 'color'
 	| 'timeLength'
 	| 'tariff'
-	| 'tank'
-	| 'chair'
-	| 'wheel'
+	| 'isFullTank'
+	| 'isNeedChildChair'
+	| 'isRightWheel'
 	| 'status';

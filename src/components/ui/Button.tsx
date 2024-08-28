@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { NavLink } from 'react-router-dom';
 
 
-type Variant = 'darkgreen-to-green' | 'blue-to-ocean' | 'orange-to-red' | 'darkpurple-to-purple' | 'green-to-darkgreen';
+type Variant = 'darkgreen-to-green' | 'blue-to-ocean' | 'orange-to-red' | 'darkpurple-to-purple' | 'green-to-darkgreen' | 'darkred-to-red';
 
 interface ButtonProps {
 	to?: string;
@@ -32,6 +32,8 @@ export const Button = ({
 			'bg-gradient-to-r from-[#281349] to-[#720C7B] transition-all hover:brightness-90 active:brightness-75',
 		'green-to-darkgreen':
 			'bg-gradient-to-r from-[#0EC261] to-[#039F67] transition-all hover:brightness-90 active:brightness-75',
+		'darkred-to-red': 
+			'bg-gradient-to-r from-[#493013] to-[#7B0C3B] transition-all hover:brightness-90 active:brightness-75',
 	};
 
 	const buttonVariant = variantStyles[variant];

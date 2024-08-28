@@ -1,4 +1,5 @@
 import { Heading } from '@/components/ui/Heading';
+import { ICar } from '@/services/car.service';
 import cn from 'classnames';
 
 interface CarCardProps {
@@ -7,10 +8,19 @@ interface CarCardProps {
 	priceMax: number;
 	priceMin: number;
 	imagePath: string;
-	onClick: (id: number, name: string, price: string, colors: string[], number: string, imagePath: string) => void;
+	onClick: (
+		id: number,
+		name: string,
+		price: string,
+		colors: string[],
+		number: string,
+		imagePath: string,
+		car: ICar
+	) => void;
 	selectedCardId: number;
 	colors: string[];
 	number: string;
+	car: ICar;
 }
 
 export const CarCard = ({
@@ -22,7 +32,8 @@ export const CarCard = ({
 	selectedCardId,
 	onClick,
 	colors,
-	number
+	number,
+	car,
 }: CarCardProps) => {
 	const buildPrice = `${priceMin} - ${priceMax}`;
 	return (
@@ -31,7 +42,9 @@ export const CarCard = ({
 				'relative w-1/2 max-md:w-full h-[224px] p-4 border border-[#EEEEEE] hover:border-gray cursor-pointer overflow-hidden',
 				{ 'border-main': selectedCardId == id }
 			)}
-			onClick={() => onClick(id, name, buildPrice, colors, number, imagePath)}
+			onClick={() =>
+				onClick(id, name, buildPrice, colors, number, imagePath, car)
+			}
 		>
 			<div className="">
 				<Heading level="h4" className="uppercase text-[18px]">

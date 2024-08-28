@@ -2,7 +2,6 @@ import { dataOrderMenu } from '@/constants/nav-menu-data';
 import { getLastPathPart } from '@/features/getLastPathPart';
 import { useAppSelector } from '@/hooks/useDispatch';
 import { RootState } from '@/store/store';
-import { IOrderData } from '@/store/types';
 import { OrderMenuLink } from './OrderMenuLink';
 
 interface OrderNavMenuProps {
