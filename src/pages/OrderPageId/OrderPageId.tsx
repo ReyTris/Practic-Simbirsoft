@@ -1,6 +1,7 @@
 import OrderField from '@/components/OrderField/OrderField';
 import { Button } from '@/components/ui/Button';
 import { useGetOrder } from '@/hooks/useGetOrder';
+import { PathNames } from '@/router/pathNames';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { useParams } from 'react-router-dom';
 export const OrderPageId = () => {
 	const [days, setDays] = useState(0);
 	const [hours, setHours] = useState(0);
-	let { id } = useParams();
+	const { id } = useParams();
 
 	const { order, loading } = useGetOrder(Number(id));
 
@@ -122,6 +123,7 @@ export const OrderPageId = () => {
 									<span className="font-semibold">Цена</span>: {order.price} Р
 								</div>
 								<Button
+									to={`/${PathNames.ORDER_PAGE}/${PathNames.POSITION_PAGE}`}
 									variant="darkred-to-red"
 									className={'mt-8 w-[100%] text-center'}
 								>

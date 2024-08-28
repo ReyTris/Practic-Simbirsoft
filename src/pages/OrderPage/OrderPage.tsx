@@ -9,7 +9,7 @@ import { Outlet, useLocation, useParams } from 'react-router-dom';
 export const OrderPage = () => {
 	const location = useLocation();
 	const [currentPath, setCurrentPath] = useState<string>('');
-	const params = useParams();
+	const { id } = useParams();
 
 	useEffect(() => {
 		setCurrentPath(getLastPathPart(location.pathname));
@@ -18,7 +18,7 @@ export const OrderPage = () => {
 	return (
 		<Container>
 			<Header />
-			{!params.id ? (
+			{!id ? (
 				<>
 					<OrderNavMenu
 						currentPath={currentPath}
