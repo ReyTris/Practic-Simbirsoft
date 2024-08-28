@@ -51,8 +51,8 @@ export const OrderBar = ({ className }: OrderBarProps) => {
 
 	return (
 		<>
-			<div className="text-[18px] font-bold text-right">Ваш заказ</div>
 			<ul className={className}>
+				<div className="text-[18px] font-bold text-right">Ваш заказ</div>
 				{Object.keys(getOrderFields).map((fieldKey: Fields) => {
 					const field = getOrderFields[fieldKey];
 					if (!field.value) return null;

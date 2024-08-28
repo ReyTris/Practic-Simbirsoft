@@ -40,7 +40,8 @@ export const OrderPageId = () => {
 						<div className="pt-8 w-[736px] max-lg:w-[100%]">
 							<div className="flex justify-between max-xl:flex-col">
 								<div className="">
-									<div className="text-[18px] font-normal mt-2">
+									<div className="text-[24px]">Ваш заказ подтвержден</div>
+									<div className="text-[18px] font-normal mt-4">
 										{order.carId.name}
 									</div>
 									<div className="text-[14px] leading-[14px] w-fit mt-2 p-2 border rounded">
