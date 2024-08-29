@@ -7,6 +7,8 @@ import {
 	IActionUpdatePosition,
 	IInitialState,
 } from './types';
+import dayjs from 'dayjs';
+import { IOrderData } from '@/services/types.order';
 
 const initialState: IInitialState = {
 	data: {
@@ -58,20 +60,20 @@ const initialState: IInitialState = {
 					name: 'Тариф',
 					value: '',
 				},
-				tank: {
+				isFullTank: {
 					name: 'Полный бак',
 					value: '',
-					type: 'tank',
+					type: 'isFullTank',
 				},
-				chair: {
+				isNeedChildChair: {
 					name: 'Детское кресло',
 					value: '',
-					type: 'chair',
+					type: 'isNeedChildChair',
 				},
-				wheel: {
+				isRightWheel: {
 					name: 'Правый руль',
 					value: '',
-					type: 'wheel',
+					type: 'isRightWheel',
 				},
 			},
 
@@ -89,25 +91,62 @@ const initialState: IInitialState = {
 				link: `${PathNames.ORDER_PAGE}/${PathNames.SUMMARY_PAGE}`,
 			},
 		},
+	},
 
-		[PathNames.SUMMARY_PAGE]: {
-			fields: {
-				model: {
-					name: 'Модель',
-					value: '',
-					type: '',
-					id: null,
-					price: '',
-					colors: [],
-					number: '',
-					imagePath: '',
-				},
+	orderData: {
+		color: '',
+		dateFrom: 0,
+		dateTo: 0,
+		price: 0,
+		isFullTank: false,
+		isNeedChildChair: false,
+		isRightWheel: false,
+		createdAt: '',
+		updatedAt: '',
+		orderStatusId: null,
+		cityId: {
+			id: 1,
+			name: '',
+			createdAt: '',
+			updatedAt: '',
+		},
+		pointId: {
+			id: 1,
+			name: '',
+			address: '',
+			city_id: 0,
+			createdAt: '',
+			updatedAt: '',
+		},
+		carId: {
+			id: 4,
+			priceMax: 0,
+			priceMin: 0,
+			name: '',
+			thumbnail: {
+				path: '',
+				size: 0,
 			},
-			button: {
-				status: false,
-				label: 'Дополнительно',
-				link: `${PathNames.ORDER_PAGE}/${PathNames.ADDITIONAL_PAGE}`,
+			description: '',
+			number: '',
+			isFullTank: '',
+			colors: [],
+			category_id: {
+				id: null,
+				name: '',
+				description: '',
+				createdAt: '',
+				updatedAt: '',
 			},
+			createdAt: '',
+			updatedAt: '',
+		},
+		rateId: {
+			id: 1,
+			price: '',
+			rateType_id: 0,
+			createdAt: '',
+			updatedAt: '',
 		},
 	},
 
@@ -131,10 +170,24 @@ export const orderSlice = createSlice({
 
 			if (city !== undefined) {
 				address.city = city;
+
+				state.orderData.cityId = {
+					...state.orderData.cityId,
+					name: `${city}`,
+					createdAt: dayjs().toISOString(),
+					updatedAt: dayjs().toISOString(),
+				};
 			}
 
 			if (street !== undefined) {
 				address.street = street;
+
+				state.orderData.pointId = {
+					...state.orderData.pointId,
+					address: `${street}`,
+					createdAt: dayjs().toISOString(),
+					updatedAt: dayjs().toISOString(),
+				};
 			}
 
 			address.value = `${address.city}${
@@ -147,7 +200,7 @@ export const orderSlice = createSlice({
 			state.data[PathNames.POSITION_PAGE].button.status = status;
 		},
 		updateModel: (state, action: PayloadAction<IActionUpdateModel>) => {
-			const { model, type, status, id, price, colors, imagePath, number } =
+			const { model, type, status, id, price, colors, imagePath, number, car } =
 				action.payload;
 
 			state.data[PathNames.MODEL_PAGE].fields.model = {
@@ -166,6 +219,14 @@ export const orderSlice = createSlice({
 			state.combinedFields = {
 				...state.data[PathNames.POSITION_PAGE].fields,
 				...state.data[PathNames.MODEL_PAGE].fields,
+			};
+
+			state.orderData = {
+				...state.orderData,
+				carId: {
+					...state.orderData.carId,
+					category_id: car.categoryId,
+				},
 			};
 		},
 		clearModel: (state) => {
@@ -201,6 +262,7 @@ export const orderSlice = createSlice({
 			action: PayloadAction<IActionUpdateAdditional>
 		) => {
 			const { options, status, startDate, endDate } = action.payload;
+			// заполнение полей заказа
 			for (let key in options) {
 				const fieldKey = key as AdditionalPayload;
 				state.data[PathNames.ADDITIONAL_PAGE].fields = {
@@ -253,6 +315,32 @@ export const orderSlice = createSlice({
 
 			state.data[PathNames.ADDITIONAL_PAGE].button.status = false;
 		},
+
+		updateOrderData: (state, action: PayloadAction<any>) => {
+			const {
+				color,
+				dateFrom,
+				dateTo,
+				isFullTank,
+				isNeedChildChair,
+				isRightWheel,
+			} = action.payload;
+
+			state.orderData.color = color ?? initialState.orderData.color;
+			state.orderData.dateFrom =
+				Number(dateFrom) ?? initialState.orderData.dateFrom;
+			state.orderData.dateTo = Number(dateTo) ?? initialState.orderData.dateTo;
+			state.orderData.isFullTank =
+				isFullTank ?? initialState.orderData.isFullTank;
+			state.orderData.isNeedChildChair =
+				isNeedChildChair ?? initialState.orderData.isNeedChildChair;
+			state.orderData.isRightWheel =
+				isRightWheel ?? initialState.orderData.isRightWheel;
+
+			state.orderData.price = state.finalPrice;
+			state.orderData.createdAt = dayjs().toISOString();
+			state.orderData.updatedAt = dayjs().toISOString();
+		},
 	},
 });
 
@@ -263,6 +351,7 @@ export const {
 	clearAdditional,
 	updateAdditional,
 	updateFinalPrice,
+	updateOrderData,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

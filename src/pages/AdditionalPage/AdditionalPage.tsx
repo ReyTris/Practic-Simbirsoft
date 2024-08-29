@@ -1,20 +1,22 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { useRateCar } from '@/hooks/useRateCar';
-import { updateAdditional, updateFinalPrice } from '@/store/OrderSlice';
+import {
+	updateAdditional,
+	updateFinalPrice,
+	updateOrderData,
+} from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
 import { Checkbox, DatePicker, Radio, RadioChangeEvent, Space } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
 import { useEffect, useState } from 'react';
 
-import * as pickerstyles from './dataPicker.module.scss';
-
 import ClearInput from '@/assets/icons/clearInput.svg';
 import dayjs from 'dayjs';
 
 const plainOptions = [
-	{ label: 'Полный бак, 500р', value: 500, field: 'tank' },
-	{ label: 'Детское кресло, 200р', value: 200, field: 'chair' },
-	{ label: 'Правый руль, 1600р', value: 1600, field: 'wheel' },
+	{ label: 'Полный бак, 500р', value: 500, field: 'isFullTank' },
+	{ label: 'Детское кресло, 200р', value: 200, field: 'isNeedChildChair' },
+	{ label: 'Правый руль, 1600р', value: 1600, field: 'isRightWheel' },
 ];
 
 export const AdditionalPage = () => {
@@ -28,7 +30,7 @@ export const AdditionalPage = () => {
 		fields,
 	} = useAppSelector((state: RootState) => state.order.data.additional);
 
-	const { color, tank, chair, wheel } = fields;
+	const { color, isFullTank, isNeedChildChair, isRightWheel } = fields;
 
 	const { priceDays: priceDaysStore, priceOptions: priceOptionsStore } =
 		useAppSelector((state: RootState) => state.order);
@@ -45,13 +47,13 @@ export const AdditionalPage = () => {
 		priceOptions: priceOptionsStore || 0,
 		options: {
 			values:
-				[tank, chair, wheel]
+				[isFullTank, isNeedChildChair, isRightWheel]
 					.filter((item) => item.value.length > 0)
 					.map(
 						(item) =>
 							plainOptions.find((option) => option.field === item.type)?.value
 					) || [],
-			fields: [tank, chair, wheel]
+			fields: [isFullTank, isNeedChildChair, isRightWheel]
 				.filter((item) => item.value.length > 0)
 				.map((item) => item.type),
 		},
@@ -62,6 +64,7 @@ export const AdditionalPage = () => {
 
 	const onChangeColor = (e: RadioChangeEvent) => {
 		setState((prev) => ({ ...prev, selectedColor: e.target.value }));
+		dispatch(updateOrderData({ color: e.target.value }));
 	};
 
 	const onChangeTariff = (e: RadioChangeEvent) => {
@@ -104,6 +107,13 @@ export const AdditionalPage = () => {
 			endDate: date,
 		}));
 		dispatch(updateAdditional({ endDate: date }));
+
+		dispatch(
+			updateOrderData({
+				dateFrom: dayjs(state.startDate).unix(),
+				dateTo: dayjs(date).unix(),
+			})
+		);
 	};
 
 	const disabledStartDate: RangePickerProps['disabledDate'] = (current) => {
@@ -172,8 +182,10 @@ export const AdditionalPage = () => {
 		plainOptions.forEach((option) => {
 			if (state.options.fields.includes(option.field)) {
 				dispatch(updateAdditional({ options: { [option.field]: 'Да' } }));
+				dispatch(updateOrderData({ [option.field]: true }));
 			} else {
 				dispatch(updateAdditional({ options: { [option.field]: '' } }));
+				dispatch(updateOrderData({ [option.field]: false }));
 			}
 		});
 		if (state.tariff && state.selectedColor && state.endDate) {

@@ -7,6 +7,7 @@ import { Navigate, createHashRouter } from 'react-router-dom';
 import { PathNames } from './pathNames';
 import AdditionalPage from '@/pages/AdditionalPage';
 import SummaryPage from '@/pages/SummaryPage';
+import OrderPageId from '@/pages/OrderPageId';
 
 const routes = createHashRouter([
 	{
@@ -26,6 +27,10 @@ const routes = createHashRouter([
 					{ path: PathNames.MODEL_PAGE, element: <ModelPage /> },
 					{ path: PathNames.ADDITIONAL_PAGE, element: <AdditionalPage /> },
 					{ path: PathNames.SUMMARY_PAGE, element: <SummaryPage /> },
+					{
+						path: ':id',
+						element: <OrderPageId />,
+					},
 				],
 			},
 		],

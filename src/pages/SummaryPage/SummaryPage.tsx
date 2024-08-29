@@ -1,3 +1,4 @@
+import { useCreateOrder } from '@/hooks/useCreateOrder';
 import { useAppSelector } from '@/hooks/useDispatch';
 import { RootState } from '@/store/store';
 import dayjs from 'dayjs';
@@ -7,7 +8,7 @@ export const SummaryPage = () => {
 		(state: RootState) => state.order.data
 	);
 	const { value, number, imagePath } = model.fields.model;
-	const { tank } = additional.fields;
+	const { isFullTank } = additional.fields;
 	const { startDate, endDate } = additional;
 	return (
 		<div className="flex justify-between max-xl:flex-col">
@@ -17,7 +18,7 @@ export const SummaryPage = () => {
 					{number}
 				</div>
 
-				{tank && (
+				{isFullTank && (
 					<div className="mt-2">
 						<span className="text-[14px] font-semibold">Топливо</span> 100%
 					</div>

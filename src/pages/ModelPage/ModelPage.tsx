@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/useDispatch';
 import { useCars } from '@/hooks/useCars';
-import {  clearAdditional, updateModel } from '@/store/OrderSlice';
+import { clearAdditional, updateModel } from '@/store/OrderSlice';
 import { RootState } from '@/store/store';
 import { RadioChangeEvent } from 'antd';
 import { useState } from 'react';
 import { CarCard } from './components/CarCard';
 import { CarCategoryFilter } from './components/CarCategoryFilter';
 import { radioData } from '@/constants/radioData';
+import { CarService, ICar } from '@/services/car.service';
 
 export const ModelPage = () => {
 	const { type, id } = useAppSelector(
@@ -26,7 +27,15 @@ export const ModelPage = () => {
 		setRadioValue(e.target.value);
 	};
 
-	const handlerSelectCar = (id: number, name: string, price: string, colors: string[], number: string, imagePath: string) => {
+	const handlerSelectCar = (
+		id: number,
+		name: string,
+		price: string,
+		colors: string[],
+		number: string,
+		imagePath: string,
+		car: ICar
+	) => {
 		setSelectedCardId(id);
 		dispatch(
 			updateModel({
@@ -37,11 +46,12 @@ export const ModelPage = () => {
 				status: true,
 				colors,
 				number,
-				imagePath
+				imagePath,
+				car,
 			})
 		);
 
-		dispatch(clearAdditional())
+		dispatch(clearAdditional());
 	};
 
 	return (
@@ -54,24 +64,32 @@ export const ModelPage = () => {
 			<div className="flex flex-wrap mt-12">
 				{loading
 					? 'Загрузка...'
-					: cars.map(
-							({ id, name, priceMax, priceMin, thumbnail, colors, number }) => {
-								return (
-									<CarCard
-										key={id}
-										id={id}
-										selectedCardId={selectedCardId}
-										name={name}
-										onClick={handlerSelectCar}
-										priceMax={priceMax}
-										priceMin={priceMin}
-										imagePath={thumbnail.path}
-										colors={colors}
-										number={number}
-									/>
-								);
-							}
-					  )}
+					: cars.map((car) => {
+							const {
+								id,
+								name,
+								priceMax,
+								priceMin,
+								thumbnail,
+								colors,
+								number,
+							} = car;
+							return (
+								<CarCard
+									key={id}
+									id={id}
+									selectedCardId={selectedCardId}
+									name={name}
+									onClick={handlerSelectCar}
+									priceMax={priceMax}
+									priceMin={priceMin}
+									imagePath={thumbnail.path}
+									colors={colors}
+									number={number}
+									car={car}
+								/>
+							);
+					  })}
 			</div>
 		</div>
 	);
