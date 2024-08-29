@@ -326,14 +326,16 @@ export const orderSlice = createSlice({
 				isRightWheel,
 			} = action.payload;
 
-			state.orderData.color = color ?? state.orderData.color;
-			state.orderData.dateFrom = Number(dateFrom) ?? state.orderData.dateFrom;
-			state.orderData.dateTo = Number(dateTo) ?? state.orderData.dateTo;
-			state.orderData.isFullTank = isFullTank ?? state.orderData.isFullTank;
+			state.orderData.color = color ?? initialState.orderData.color;
+			state.orderData.dateFrom =
+				Number(dateFrom) ?? initialState.orderData.dateFrom;
+			state.orderData.dateTo = Number(dateTo) ?? initialState.orderData.dateTo;
+			state.orderData.isFullTank =
+				isFullTank ?? initialState.orderData.isFullTank;
 			state.orderData.isNeedChildChair =
-				isNeedChildChair ?? state.orderData.isNeedChildChair;
+				isNeedChildChair ?? initialState.orderData.isNeedChildChair;
 			state.orderData.isRightWheel =
-				isRightWheel ?? state.orderData.isRightWheel;
+				isRightWheel ?? initialState.orderData.isRightWheel;
 
 			state.orderData.price = state.finalPrice;
 			state.orderData.createdAt = dayjs().toISOString();
